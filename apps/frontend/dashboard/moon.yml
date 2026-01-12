@@ -1,0 +1,17 @@
+tasks:
+  build:
+    command: 'pnpm build'
+    inputs:
+      - 'src/**/*'
+    outputs:
+      - '.next'
+  start:
+    command: 'pnpm start'
+    inputs:
+      - '.next/**/*'
+    outputs:
+      - '.next/**/*'
+  lint:
+    command: 'pnpm lint'
+    inputs:
+      - 'src/**/*'

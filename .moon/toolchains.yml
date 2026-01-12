@@ -1,0 +1,9 @@
+javascript:
+  packageManager: 'pnpm'
+
+node:
+  version: '22.20.0'
+
+pnpm:
+  version: '10.18.0'
+
