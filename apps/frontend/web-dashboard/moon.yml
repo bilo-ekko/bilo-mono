@@ -1,0 +1,24 @@
+layer: 'tool'
+language: 'javascript'
+
+project:
+  name: 'Next.js Dashboard'
+  description: 'A dashboard built with Next.js'
+
+tasks:
+  build:
+    command: 'pnpm build'
+    inputs:
+      - 'src/**/*'
+    outputs:
+      - '.next'
+  start:
+    command: 'pnpm start'
+    inputs:
+      - '.next/**/*'
+    outputs:
+      - '.next/**/*'
+  lint:
+    command: 'pnpm lint'
+    inputs:
+      - 'src/**/*'

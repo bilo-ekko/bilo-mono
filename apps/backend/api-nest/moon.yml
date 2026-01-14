@@ -1,8 +1,9 @@
-# https://moonrepo.dev/docs/config/project
-$schema: '../../../.moon/cache/schemas/project.json'
-
 language: 'typescript'
-type: 'application'
+# type: 'application'
+
+project:
+  name: 'NestJS API'
+  description: 'A NestJS API'
 
 tasks:
   build:
@@ -17,8 +18,8 @@ tasks:
       - 'dist'
 
   dev:
-    command: 'nest start --watch'
-    local: true
+    # command: 'nest start --watch' # NOTE: this launches nest in watch mode, but hides all the other application logs of your monorepo
+    command: 'nest start'
     inputs:
       - 'src/**/*'
       - 'tsconfig.json'
@@ -27,7 +28,6 @@ tasks:
 
   start:
     command: 'nest start'
-    local: true
     inputs:
       - 'dist/**/*'
     deps:
@@ -35,7 +35,6 @@ tasks:
 
   start-prod:
     command: 'node dist/main'
-    local: true
     inputs:
       - 'dist/**/*'
     deps:
@@ -51,7 +50,6 @@ tasks:
 
   test-watch:
     command: 'jest --watch'
-    local: true
     inputs:
       - 'src/**/*'
       - 'test/**/*'

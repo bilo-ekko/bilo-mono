@@ -1,0 +1,5 @@
+🚀 Server starting on http://localhost:9000
+Available endpoints:
+  - GET http://localhost:9000/
+  - GET http://localhost:9000/api/health
+  - GET http://localhost:9000/api/hello

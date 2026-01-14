@@ -1,7 +1,9 @@
-# https://moonrepo.dev/docs/config/project
-$schema: '../../../.moon/cache/schemas/project.json'
-
+layer: 'tool'
 language: 'go'
+
+project:
+  name: 'Go API'
+  description: 'A Go Lang API'
 
 tasks:
   build:
@@ -15,7 +17,6 @@ tasks:
 
   dev:
     command: 'go run main.go'
-    local: true
     inputs:
       - '**/*.go'
       - 'go.mod'
@@ -23,7 +24,6 @@ tasks:
 
   start:
     command: 'go run main.go'
-    local: true
     inputs:
       - '**/*.go'
       - 'go.mod'

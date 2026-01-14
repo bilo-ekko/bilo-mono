@@ -1,0 +1,57 @@
+# https://moonrepo.dev/docs/config/workspace
+$schema: './cache/schemas/workspace.json'
+
+# extends: './shared/workspace.yml'
+
+projects:
+  - 'apps/frontend/*'
+  - 'apps/backend/*'
+  - 'packages/*'
+
+# projects:
+#   dashboard:
+#     path: 'apps/frontend/dashboard'
+#     layer: 'frontend'
+#     language: 'javascript'
+#     project:
+#       name: 'Dashboard'
+#       description: 'A dashboard built with Next.js'
+#     tasks:
+#       build:
+#         command: 'pnpm build'
+#         inputs:
+#           - 'src/**/*'
+#   sdk-ui:
+#     path: 'apps/frontend/sdk-ui'
+#     layer: 'frontend'
+#     language: 'javascript'
+#     project:
+#       name: 'SDK UI'
+#       description: 'A SvelteKit application rendering climate action widgets for checkout and post-purchase flows.'
+#     tasks:
+#       build:
+#         command: 'pnpm build'
+#         inputs:
+#           - 'src/**/*'
+#       start:
+#         command: 'pnpm start'
+#         inputs:
+#           - 'src/**/*'
+#       lint:
+#         command: 'pnpm lint'
+#   api-nest:
+#     path: 'apps/backend/api-nest'
+#     layer: 'backend'
+#     language: 'typescript'
+#     project:
+#       name: 'API Nest'
+#       description: 'A NestJS API'
+#     tasks:
+#       build:
+#         command: 'pnpm build'
+#         inputs:
+#           - 'src/**/*'
+
+vcs:
+  manager: 'git'
+  defaultBranch: 'main'
