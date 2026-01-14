@@ -1,3 +1,4 @@
+layer: 'application'
 language: javascript
 
 project:
@@ -18,8 +19,8 @@ tasks:
       - 'tsconfig.json'
       - 'package.json'
     outputs:
-      - '.svelte-kit'
-      - 'build'
+      - '.svelte-kit/**/*'
+      - 'build/**/*'
   
   check:
     command: pnpm check

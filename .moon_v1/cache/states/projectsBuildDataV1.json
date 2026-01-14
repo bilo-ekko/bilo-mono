@@ -1,1 +1,0 @@
-{"lastHash":"7b64dc802cc04db5ce7bc869b9a79bdc857f3cee9926e65290a02eb314cb7d54","projects":{"api-nest":{"node_index":0,"source":"apps/backend/api-nest"},"dashboard":{"node_index":1,"source":"apps/frontend/dashboard"},"api-golang":{"node_index":2,"source":"apps/backend/api-golang"},"sdk-ui":{"node_index":3,"source":"apps/frontend/sdk-ui"}}}

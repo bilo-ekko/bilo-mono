@@ -2,9 +2,12 @@
 
 > **Prerequisites**
 >
-> You should install [proto]() dependency manager.
+> You should [install proto](https://moonrepo.dev/proto) dependency manager.
+> `bash <(curl -fsSL https://moonrepo.dev/install/proto.sh)`
 >
 > You should install moon with `proto install moon 2.0.0-beta.0`
+
+> **💡 Tip:** Use `./run.sh --help` to see all commands from this file and execute them easily!
 
 ## Quickstart
 

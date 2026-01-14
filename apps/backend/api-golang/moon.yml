@@ -1,4 +1,4 @@
-layer: 'tool'
+layer: 'application'
 language: 'go'
 
 project:
@@ -7,7 +7,7 @@ project:
 
 tasks:
   build:
-    command: 'go build -o bin/api-golang'
+    command: 'go build -o bin/api-golang ./cmd/api'
     inputs:
       - '**/*.go'
       - 'go.mod'
@@ -16,14 +16,14 @@ tasks:
       - 'bin/api-golang'
 
   dev:
-    command: 'go run main.go'
+    command: 'go run ./cmd/api/main.go'
     inputs:
       - '**/*.go'
       - 'go.mod'
       - 'go.sum'
 
   start:
-    command: 'go run main.go'
+    command: 'go run ./cmd/api/main.go'
     inputs:
       - '**/*.go'
       - 'go.mod'

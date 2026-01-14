@@ -1,0 +1,668 @@
+{
+  "info": {
+    "name": "Bilo Mono API Collection",
+    "description": "Complete API testing collection for NestJS and Go backend services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "nest_base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "go_base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "NestJS API (Port 3000)",
+      "item": [
+        {
+          "name": "Health Check",
+          "item": [
+            {
+              "name": "Get Root",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response has Hello World message\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('message');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/",
+                  "host": ["{{nest_base_url}}"],
+                  "path": [""]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Equivalents",
+          "item": [
+            {
+              "name": "Get All Equivalents",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is an array\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.be.an('array');",
+                      "});",
+                      "",
+                      "pm.test(\"Array contains equivalents with required fields\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.length > 0) {",
+                      "        pm.expect(jsonData[0]).to.have.property('id');",
+                      "        pm.expect(jsonData[0]).to.have.property('category');",
+                      "        pm.expect(jsonData[0]).to.have.property('value');",
+                      "        pm.expect(jsonData[0]).to.have.property('unit');",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/equivalents",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["equivalents"]
+                }
+              }
+            },
+            {
+              "name": "Get Equivalents by Category",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"All results match category filter\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    jsonData.forEach(function(item) {",
+                      "        pm.expect(item.category.toLowerCase()).to.equal('transportation');",
+                      "    });",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/equivalents?category=transportation",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["equivalents"],
+                  "query": [
+                    {
+                      "key": "category",
+                      "value": "transportation"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Single Equivalent",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response has correct ID\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.equal('1');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/equivalents/1",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["equivalents", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Equivalent",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Response contains created equivalent\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('id');",
+                      "    pm.expect(jsonData.category).to.equal('testing');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"category\": \"testing\",\n  \"value\": 1.5,\n  \"unit\": \"kg CO2\",\n  \"description\": \"Test equivalent\"\n}"
+                },
+                "url": {
+                  "raw": "{{nest_base_url}}/equivalents",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["equivalents"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Quotes",
+          "item": [
+            {
+              "name": "Get All Quotes",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is an array\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.be.an('array');",
+                      "});",
+                      "",
+                      "pm.test(\"Quotes have required fields\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.length > 0) {",
+                      "        pm.expect(jsonData[0]).to.have.property('id');",
+                      "        pm.expect(jsonData[0]).to.have.property('customerId');",
+                      "        pm.expect(jsonData[0]).to.have.property('items');",
+                      "        pm.expect(jsonData[0]).to.have.property('totalAmount');",
+                      "        pm.expect(jsonData[0]).to.have.property('status');",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/quotes",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["quotes"]
+                }
+              }
+            },
+            {
+              "name": "Get Quotes by Customer",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"All results match customer filter\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    jsonData.forEach(function(item) {",
+                      "        pm.expect(item.customerId).to.equal('customer-1');",
+                      "    });",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/quotes?customerId=customer-1",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["quotes"],
+                  "query": [
+                    {
+                      "key": "customerId",
+                      "value": "customer-1"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Single Quote",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response has correct ID\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.equal('1');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{nest_base_url}}/quotes/1",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["quotes", "1"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Response contains created quote\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('id');",
+                      "    pm.expect(jsonData.customerId).to.equal('customer-test');",
+                      "    pm.expect(jsonData.totalAmount).to.equal(1500);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customerId\": \"customer-test\",\n  \"items\": [\n    {\n      \"productId\": \"test-product-1\",\n      \"quantity\": 100,\n      \"unitPrice\": 15,\n      \"totalPrice\": 1500\n    }\n  ],\n  \"currency\": \"USD\"\n}"
+                },
+                "url": {
+                  "raw": "{{nest_base_url}}/quotes",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["quotes"]
+                }
+              }
+            },
+            {
+              "name": "Update Quote Status",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Status was updated\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.status).to.equal('accepted');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"status\": \"accepted\"\n}"
+                },
+                "url": {
+                  "raw": "{{nest_base_url}}/quotes/1",
+                  "host": ["{{nest_base_url}}"],
+                  "path": ["quotes", "1"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Go API (Port 8080)",
+      "item": [
+        {
+          "name": "Health Check",
+          "item": [
+            {
+              "name": "Get Root",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response has message and time\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('message');",
+                      "    pm.expect(jsonData).to.have.property('time');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/",
+                  "host": ["{{go_base_url}}"],
+                  "path": [""]
+                }
+              }
+            },
+            {
+              "name": "Health Check",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Health status is ok\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.status).to.equal('ok');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/health",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "health"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Impact Partners",
+          "item": [
+            {
+              "name": "Get All Impact Partners",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is an array\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.be.an('array');",
+                      "});",
+                      "",
+                      "pm.test(\"Partners have required fields\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.length > 0) {",
+                      "        pm.expect(jsonData[0]).to.have.property('id');",
+                      "        pm.expect(jsonData[0]).to.have.property('name');",
+                      "        pm.expect(jsonData[0]).to.have.property('category');",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/impact-partners",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "impact-partners"]
+                }
+              }
+            },
+            {
+              "name": "Get Single Impact Partner",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response has correct partner\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.equal('1');",
+                      "    pm.expect(jsonData.name).to.equal('GoldStandard');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/impact-partners/1",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "impact-partners", "1"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Impact Projects",
+          "item": [
+            {
+              "name": "Get All Impact Projects",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is an array\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.be.an('array');",
+                      "});",
+                      "",
+                      "pm.test(\"Projects have required fields\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    if (jsonData.length > 0) {",
+                      "        pm.expect(jsonData[0]).to.have.property('id');",
+                      "        pm.expect(jsonData[0]).to.have.property('name');",
+                      "        pm.expect(jsonData[0]).to.have.property('category');",
+                      "        pm.expect(jsonData[0]).to.have.property('partnerId');",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/impact-projects",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "impact-projects"]
+                }
+              }
+            },
+            {
+              "name": "Get Single Impact Project",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Response has correct project\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.id).to.equal('1');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/impact-projects/1",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "impact-projects", "1"]
+                }
+              }
+            },
+            {
+              "name": "Get Projects by Partner",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"All projects belong to partner 2\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    jsonData.forEach(function(project) {",
+                      "        pm.expect(project.partnerId).to.equal('2');",
+                      "    });",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/impact-projects?partnerId=2",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "impact-projects"],
+                  "query": [
+                    {
+                      "key": "partnerId",
+                      "value": "2"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

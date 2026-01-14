@@ -84,6 +84,24 @@ moon run :test
 moon run :lint
 ```
 
+### Quick Command Helper 🎯
+
+For convenience, use the `run.sh` script to easily discover and execute commands from `DOCS.md`:
+
+```bash
+# Show all available commands with descriptions
+./run.sh --help
+
+# List commands in a simple format
+./run.sh --list
+
+# Run a command by its number
+./run.sh 7           # Runs: moon projects
+
+# Run any command directly
+./run.sh moon run :build
+```
+
 ### Check & CI
 
 ```bash
@@ -124,10 +142,10 @@ moon task-graph <project>:<task>
 
 ### Frontend
 
-| Project     | Framework  | Port | Tasks                          |
-|-------------|------------|------|--------------------------------|
-| `dashboard` | Next.js    | 3000 | `build`, `start`, `lint`       |
-| `sdk-ui`    | SvelteKit  | 5173 | `build`, `dev`, `check`, `preview` |
+| Project          | Framework  | Port | Tasks                          |
+|------------------|------------|------|--------------------------------|
+| `web-dashboard`  | Next.js    | 4000 | `build`, `dev`, `start`, `lint`|
+| `web-sdks`       | SvelteKit  | 4001 | `build`, `dev`, `check`, `preview` |
 
 ---
 
@@ -140,9 +158,9 @@ moon task-graph <project>:<task>
 moon run api-nest:dev &
 moon run api-golang:dev
 
-# Start a frontend
-moon run dashboard:dev
-moon run sdk-ui:dev
+# Start frontend apps
+moon run web-dashboard:dev    # Runs on http://localhost:4000
+moon run web-sdks:dev          # Runs on http://localhost:4001
 ```
 
 ### Build for Production

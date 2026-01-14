@@ -1,0 +1,20 @@
+layer: 'automation'
+
+project:
+  name: 'Postman Tests'
+  description: 'A collection of Postman tests'
+
+tasks:
+  dev:
+    command: 'newman run tests/postman/collection.json'
+    inputs:
+      - 'tests/postman/collection.json'
+    outputs:
+      - 'tests/postman/results.json'
+
+  test:
+    command: 'newman run tests/postman/collection.json'
+    inputs:
+      - 'tests/postman/collection.json'
+    outputs:
+      - 'tests/postman/results.json'
