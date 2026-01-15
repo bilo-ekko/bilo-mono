@@ -163,6 +163,25 @@ moon run web-dashboard:dev    # Runs on http://localhost:4000
 moon run web-sdks:dev          # Runs on http://localhost:4001
 ```
 
+### Stopping All Processes
+
+If you need to kill all running development servers (even if terminals were closed):
+
+```bash
+# Kill all app processes by port
+./scripts/killall.sh
+
+# On Windows
+.\scripts\killall.ps1
+```
+
+This will:
+- Kill processes on port 8080 (api-golang)
+- Kill processes on port 3000 (api-nestjs)
+- Kill processes on port 4000 (web-dashboard)
+- Kill processes on port 4001 (web-sdks-apps)
+- Clean up any remaining nest, next, vite, and go run processes
+
 ### Build for Production
 
 ```bash

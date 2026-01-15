@@ -7,7 +7,7 @@
 >
 > You should install moon with `proto install moon 2.0.0-beta.0`
 
-> **💡 Tip:** Use `.scripts/run.sh --help` to see all commands from this file and execute them easily!
+> **💡 Tip:** Use `./scripts/run.sh --help` to see all commands from this file and execute them easily!
 
 There is a VSCode (and Cursor) extension: [moon console](https://marketplace.visualstudio.com/items?itemName=moonrepo.moon-console)
 
@@ -95,3 +95,26 @@ Language:
 ```sh
 moon run :dev --query "language=typescript"
 ```
+
+### Utility Scripts
+
+#### Kill All Running Apps
+
+Kill all running development servers by their ports (works even if terminals were closed):
+
+```sh
+./scripts/killall.sh
+```
+
+This will:
+- Kill processes on port 8080 (api-golang)
+- Kill processes on port 3000 (api-nestjs)  
+- Kill processes on port 4000 (web-dashboard)
+- Kill processes on port 4001 (web-sdks-apps)
+- Clean up any remaining nest, next, vite, and go run processes
+
+Useful when:
+- Ports are stuck/occupied after closing terminals
+- Apps won't restart due to port conflicts
+- Need to quickly stop all running development servers
+- Cleaning up before starting fresh development session

@@ -3,6 +3,7 @@ stack: 'unknown'
 language: 'typescript'
 
 tags:
+  - 'test'
   - 'testing'
   - 'postman'
   - 'newman'
@@ -13,7 +14,7 @@ project:
 
 tasks:
   install:
-    command: 'npm install'
+    command: 'pnpm install'
     inputs:
       - 'package.json'
     outputs:

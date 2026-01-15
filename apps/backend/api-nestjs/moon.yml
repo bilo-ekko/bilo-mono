@@ -64,7 +64,7 @@ tasks:
       - '~:build'
 
   test:
-    command: 'jest'
+    command: 'pnpm test'
     inputs:
       - 'src/**/*'
       - 'test/**/*'
