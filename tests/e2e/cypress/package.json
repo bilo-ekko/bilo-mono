@@ -1,0 +1,22 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm cypress open",
+    "test": "cypress run",
+    "test:ui": "cypress open",
+    "test:debug": "cypress run --debug",
+    "codegen": "cypress open --config-file=codegen.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^15.9.0",
+    "next": "^16.1.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  }
+}

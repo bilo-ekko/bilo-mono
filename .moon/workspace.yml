@@ -6,7 +6,7 @@
 projects:
   - 'apps/backend/*'
   - 'apps/frontend/*'
-  - 'common/*/moon.yml'
+  - 'packages/*/moon.yml'
   - 'tests/*/moon.yml'
 
 vcs:

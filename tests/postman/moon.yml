@@ -1,5 +1,11 @@
 layer: 'automation'
-language: 'javascript'
+stack: 'unknown'
+language: 'typescript'
+
+tags:
+  - 'testing'
+  - 'postman'
+  - 'newman'
 
 project:
   name: 'API Tests'
