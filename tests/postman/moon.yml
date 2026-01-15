@@ -21,7 +21,7 @@ tasks:
       - 'node_modules'
 
   test:
-    command: 'npm test'
+    command: 'pnpm test'
     inputs:
       - 'collection.json'
       - 'package.json'
@@ -29,7 +29,7 @@ tasks:
       - '~:install'
 
   test-verbose:
-    command: 'npm run test:verbose'
+    command: 'pnpm run test:verbose'
     inputs:
       - 'collection.json'
       - 'package.json'
@@ -37,7 +37,7 @@ tasks:
       - '~:install'
 
   test-html:
-    command: 'npm run test:html'
+    command: 'pnpm run test:html'
     inputs:
       - 'collection.json'
       - 'package.json'

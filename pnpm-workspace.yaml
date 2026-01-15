@@ -3,3 +3,5 @@ packages:
   - 'apps/frontend/*'
   - 'packages/ts/*'
   - 'packages/go/*'
+  - 'tests/*'
+  - 'tests/e2e/*'

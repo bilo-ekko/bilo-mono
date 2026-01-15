@@ -6,7 +6,7 @@ scripts to run from root:
 - [X] install
 - [X] build
 - [X] dev
-- [ ] test
+- [X] test
 
 - [ ] changing common packages:
     - [ ] manual rebuild required?

@@ -1,1 +1,4 @@
 node_modules
+.ignored
+report.html
+report.json
