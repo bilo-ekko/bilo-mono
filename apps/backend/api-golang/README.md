@@ -1,202 +1,140 @@
-# api-golang
+# Go API
 
-A Go API service implementing climate impact partners and projects management.
+A Go Lang REST API built with standard library HTTP server.
 
-## 🏗️ Project Structure
+## Features
 
-**Feature-First Organization** - Each feature contains all its layers (entity, repository, service, controller).
+- RESTful API endpoints
+- Impact Partners management
+- Impact Projects management
+- Shared packages integration:
+  - Logger for structured logging
+  - Calculator for mathematical operations
 
-```
-api-golang/
-├── cmd/
-│   └── api/
-│       └── main.go                 # Application entry point
-├── internal/
-│   ├── impact_partner/             # Impact Partner feature
-│   │   ├── entity.go               # Domain model
-│   │   ├── repository.go           # Data access layer
-│   │   ├── service.go              # Business logic
-│   │   └── controller.go           # HTTP handlers
-│   └── impact_project/             # Impact Project feature
-│       ├── entity.go               # Domain model
-│       ├── repository.go           # Data access layer
-│       ├── service.go              # Business logic
-│       └── controller.go           # HTTP handlers
-├── bin/
-│   └── api-golang                  # Compiled binary (generated)
-├── go.mod
-└── moon.yml
-```
+## Shared Packages
 
-## 📦 Domain Models
+This application uses shared Go packages from the monorepo:
 
-### ImpactPartner
-Represents an organization providing climate impact services.
+- `packages/go/common/logger` - Structured logging with context
+- `packages/go/common/calculator` - Mathematical calculation utilities
 
-```go
-type ImpactPartner struct {
-    ID       string `json:"id"`
-    Name     string `json:"name"`
-    Category string `json:"category"` // e.g., "carbon-offset", "reforestation", "renewable-energy"
-}
-```
+## Development
 
-### ImpactProject
-Represents a specific climate impact project.
+### Prerequisites
 
-```go
-type ImpactProject struct {
-    ID        string `json:"id"`
-    Name      string `json:"name"`
-    Category  string `json:"category"`  // e.g., "solar", "wind", "forest-conservation"
-    PartnerID string `json:"partnerId"` // Foreign key to ImpactPartner
-}
-```
+- Go 1.25.3 or higher
+- Moon CLI (for task running)
 
-## 🚀 Getting Started
-
-### Run Development Server
-```bash
-moon run api-golang:dev
-# or
-go run ./cmd/api/main.go
-```
-
-### Build
-```bash
-moon run api-golang:build
-# or
-go build -o bin/api-golang ./cmd/api
-```
-
-### Run Binary
-```bash
-./bin/api-golang
-```
-
-## 📡 API Endpoints
-
-**Server runs on:** `http://localhost:8080`
-
-### General Endpoints
-
-| Method | Endpoint           | Description            |
-|--------|-------------------|------------------------|
-| GET    | `/`               | Welcome message        |
-| GET    | `/api/health`     | Health check           |
-| GET    | `/api/hello?name=` | Hello endpoint        |
-
-### Impact Partners
-
-| Method | Endpoint                      | Description                    |
-|--------|-------------------------------|--------------------------------|
-| GET    | `/api/impact-partners`        | Get all impact partners        |
-| GET    | `/api/impact-partners/{id}`   | Get specific partner by ID     |
-
-**Sample Response:**
-```json
-[
-  {
-    "id": "1",
-    "name": "GoldStandard",
-    "category": "carbon-offset"
-  },
-  {
-    "id": "2",
-    "name": "Ekko Climate",
-    "category": "reforestation"
-  }
-]
-```
-
-### Impact Projects
-
-| Method | Endpoint                            | Description                      |
-|--------|-------------------------------------|----------------------------------|
-| GET    | `/api/impact-projects`              | Get all impact projects          |
-| GET    | `/api/impact-projects/{id}`         | Get specific project by ID       |
-| GET    | `/api/impact-projects?partnerId={id}` | Get projects by partner ID    |
-
-**Sample Response:**
-```json
-[
-  {
-    "id": "1",
-    "name": "Amazon Rainforest Conservation",
-    "category": "forest-conservation",
-    "partnerId": "2"
-  },
-  {
-    "id": "2",
-    "name": "Solar Farm Initiative India",
-    "category": "solar",
-    "partnerId": "3"
-  }
-]
-```
-
-## 🧪 Testing
+### Running Tests
 
 ```bash
 # Run all tests
 moon run api-golang:test
-# or
-go test ./...
 
-# Run with verbose output
+# Run tests with coverage
+moon run api-golang:test-coverage
+
+# Run tests directly with go
 go test -v ./...
+
+# Run specific package tests
+go test -v ./cmd/api
+go test -v github.com/bilo-mono/packages/common/calculator
+go test -v github.com/bilo-mono/packages/common/logger
 ```
 
-## 🔧 Other Commands
+### Development Server
+
+```bash
+# Start dev server
+moon run api-golang:dev
+
+# Or with Go directly
+go run ./cmd/api/main.go
+```
+
+### Building
+
+```bash
+# Build the application
+moon run api-golang:build
+
+# Or with Go directly
+go build -o bin/api-golang ./cmd/api
+```
+
+### Other Tasks
 
 ```bash
 # Format code
 moon run api-golang:format
-# or
-go fmt ./...
 
 # Lint code
 moon run api-golang:lint
-# or
-go vet ./...
 
 # Tidy dependencies
 moon run api-golang:tidy
-# or
-go mod tidy
 ```
 
-## 📝 Sample Data
+## API Endpoints
 
-The application comes pre-seeded with sample data:
+### Health & Info
 
-**Partners:**
-- GoldStandard (carbon-offset)
-- Ekko Climate (reforestation)
-- Green Energy Co (renewable-energy)
+- `GET /` - Welcome message
+- `GET /api/health` - Health check
+- `GET /api/hello?name=World` - Hello endpoint
 
-**Projects:**
-- Amazon Rainforest Conservation
-- Solar Farm Initiative India
-- Wind Energy Project Denmark
-- Mangrove Restoration Program
+### Impact Partners
 
-## 🏛️ Architecture
+- `GET /api/impact-partners` - List all partners
+- `GET /api/impact-partners/{id}` - Get partner by ID
 
-This project follows a **feature-first** clean architecture pattern:
+### Impact Projects
 
-### Feature Organization
-Each feature module (`impact_partner`, `impact_project`) contains:
+- `GET /api/impact-projects` - List all projects
+- `GET /api/impact-projects/{id}` - Get project by ID
+- `GET /api/impact-projects?partnerId={id}` - List projects by partner
 
-1. **Entity** (`entity.go`) - Core domain model
-2. **Repository** (`repository.go`) - Data access layer (currently in-memory, can be swapped with DB)
-3. **Service** (`service.go`) - Business logic layer
-4. **Controller** (`controller.go`) - HTTP handlers and routing
+## Testing
 
-### Benefits
-- **High Cohesion**: Related code stays together
-- **Easy Navigation**: All partner-related code is in one place
-- **Scalability**: Easy to add new features without affecting others
-- **Clear Boundaries**: Each feature is self-contained
+The application includes comprehensive tests:
 
-The `internal/` directory follows Go conventions, making the packages private to this module.
+### Integration Tests (`cmd/api/main_test.go`)
+
+Tests that verify shared packages work correctly in the application:
+
+- `TestCalculatorIntegration` - Verifies calculator package functionality
+- `TestCalculatorBatch` - Verifies batch calculation operations
+- `TestLoggerIntegration` - Verifies logger package functionality
+- `TestPtrFloat64` - Tests helper function
+- `TestSharedPackagesAccessibility` - Verifies packages can be imported
+
+### Package Tests
+
+- `packages/go/common/calculator/calculator_test.go` - Calculator package unit tests
+- `packages/go/common/logger/logger_test.go` - Logger package unit tests
+
+All tests include:
+- Unit tests for core functionality
+- Edge case testing (zero values, negative values, etc.)
+- Benchmark tests for performance monitoring
+
+## Architecture
+
+```
+apps/backend/api-golang/
+├── cmd/
+│   └── api/
+│       ├── main.go          # Application entry point
+│       └── main_test.go     # Integration tests
+├── internal/
+│   ├── impact_partner/      # Partner domain logic
+│   └── impact_project/      # Project domain logic
+├── go.mod                   # Go module definition
+└── moon.yml                 # Moon task configuration
+```
+
+## Dependencies
+
+- Standard library (net/http, encoding/json, etc.)
+- `github.com/bilo-mono/packages/common` - Shared monorepo packages

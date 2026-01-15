@@ -1,0 +1,19 @@
+type: 'library'
+language: 'typescript'
+
+project:
+  name: 'ts-common'
+  description: 'Shared TypeScript utilities for bilo-mono'
+
+tasks:
+  build:
+    command: 'tsc'
+    inputs:
+      - 'src/**/*'
+      - 'tsconfig.json'
+    outputs:
+      - 'dist'
+
+  dev:
+    command: 'tsc --watch'
+    local: true

@@ -5,10 +5,12 @@ import (
 	"api-golang/internal/impact_project"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/bilo-mono/packages/common/calculator"
+	"github.com/bilo-mono/packages/common/logger"
 )
 
 type Response struct {
@@ -22,6 +24,18 @@ type HealthResponse struct {
 }
 
 func main() {
+	// Initialize shared logger
+	appLogger := logger.NewLogger("Go-API")
+	appLogger.Info("Initializing Go API application...")
+
+	// Demonstrate calculator usage
+	calcResult := calculator.CalculateX(calculator.CalculateXInput{
+		Value:      100.0,
+		Multiplier: ptrFloat64(1.5),
+		Offset:     ptrFloat64(25.0),
+	})
+	appLogger.Infof("Calculation result: %s", calcResult.Formula)
+
 	// Initialize Impact Partner module
 	partnerRepo := impact_partner.NewRepository()
 	partnerService := impact_partner.NewService(partnerRepo)
@@ -75,9 +89,15 @@ func main() {
 	fmt.Println("  - GET  http://localhost" + port + "/api/impact-projects?partnerId={id}")
 	fmt.Println()
 
+	appLogger.Infof("Server listening on http://localhost%s", port)
 	if err := http.ListenAndServe(port, nil); err != nil {
-		log.Fatal(err)
+		appLogger.Error("Server failed to start", err)
 	}
+}
+
+// ptrFloat64 returns a pointer to a float64 value
+func ptrFloat64(v float64) *float64 {
+	return &v
 }
 
 // homeHandler handles requests to the root path

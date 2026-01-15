@@ -1,0 +1,19 @@
+type: 'library'
+language: 'go'
+
+project:
+  name: 'go-common'
+  description: 'Shared Go utilities for bilo-mono'
+
+tasks:
+  build:
+    command: 'go build ./...'
+    inputs:
+      - '**/*.go'
+      - 'go.mod'
+
+  test:
+    command: 'go test -v ./...'
+    inputs:
+      - '**/*.go'
+      - 'go.mod'

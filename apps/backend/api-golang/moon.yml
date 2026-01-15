@@ -33,16 +33,6 @@ tasks:
     outputs:
       - 'bin/api-golang'
   
-  # test:
-  #   command: 'go test ./...'
-  #   inputs:
-  #     - '**/*.go'
-  #     - 'go.mod'
-  #     - 'go.sum'
-  #   outputs:
-  #     - 'coverage.txt'
-  #     - 'coverage.html'
-
   dev:
     command: 'go run ./cmd/api/main.go'
     options:
@@ -61,7 +51,25 @@ tasks:
       - 'go.sum'
 
   test:
-    command: 'go test ./...'
+    command: 'go test -v ./...'
+    inputs:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+
+  test-coverage:
+    command: 'go test -v -coverprofile=coverage.out -covermode=atomic ./...'
+    inputs:
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+    outputs:
+      - 'coverage.out'
+
+  test-watch:
+    command: 'go test -v ./...'
+    options:
+      persistent: true
     inputs:
       - '**/*.go'
       - 'go.mod'
