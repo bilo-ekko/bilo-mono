@@ -48,7 +48,6 @@ declare module '$env/static/private' {
 	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const PROTO_SHIM_NAME: string;
 	export const STARBASE_LOG: string;
-	export const ZDOTDIR: string;
 	export const MOON_TASK_RETRY_TOTAL: string;
 	export const npm_config_registry: string;
 	export const ZSH: string;
@@ -64,7 +63,6 @@ declare module '$env/static/private' {
 	export const SSH_AUTH_SOCK: string;
 	export const PROTO_LOOKUP_DIR: string;
 	export const PROTO_VERSION: string;
-	export const VSCODE_PROFILE_INITIALIZED: string;
 	export const __CF_USER_TEXT_ENCODING: string;
 	export const MOON_CACHE: string;
 	export const npm_execpath: string;
@@ -79,7 +77,6 @@ declare module '$env/static/private' {
 	export const PROTO_PNPM_VERSION: string;
 	export const npm_package_json: string;
 	export const MOON_LOG: string;
-	export const USER_ZDOTDIR: string;
 	export const __CFBundleIdentifier: string;
 	export const PWD: string;
 	export const npm_command: string;
@@ -105,7 +102,6 @@ declare module '$env/static/private' {
 	export const XPC_SERVICE_NAME: string;
 	export const npm_package_version: string;
 	export const pnpm_config_verify_deps_before_run: string;
-	export const VSCODE_INJECTION: string;
 	export const HOME: string;
 	export const SHLVL: string;
 	export const STARBASE_THEME: string;
@@ -184,7 +180,6 @@ declare module '$env/dynamic/private' {
 		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		PROTO_SHIM_NAME: string;
 		STARBASE_LOG: string;
-		ZDOTDIR: string;
 		MOON_TASK_RETRY_TOTAL: string;
 		npm_config_registry: string;
 		ZSH: string;
@@ -200,7 +195,6 @@ declare module '$env/dynamic/private' {
 		SSH_AUTH_SOCK: string;
 		PROTO_LOOKUP_DIR: string;
 		PROTO_VERSION: string;
-		VSCODE_PROFILE_INITIALIZED: string;
 		__CF_USER_TEXT_ENCODING: string;
 		MOON_CACHE: string;
 		npm_execpath: string;
@@ -215,7 +209,6 @@ declare module '$env/dynamic/private' {
 		PROTO_PNPM_VERSION: string;
 		npm_package_json: string;
 		MOON_LOG: string;
-		USER_ZDOTDIR: string;
 		__CFBundleIdentifier: string;
 		PWD: string;
 		npm_command: string;
@@ -241,7 +234,6 @@ declare module '$env/dynamic/private' {
 		XPC_SERVICE_NAME: string;
 		npm_package_version: string;
 		pnpm_config_verify_deps_before_run: string;
-		VSCODE_INJECTION: string;
 		HOME: string;
 		SHLVL: string;
 		STARBASE_THEME: string;

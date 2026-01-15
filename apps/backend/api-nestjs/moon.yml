@@ -2,6 +2,7 @@ layer: 'application'
 stack: 'backend'
 language: 'typescript'
 tags:
+  - 'impactpay'
   - 'backend'
   - 'nestjs'
   - 'typescript'
@@ -17,6 +18,14 @@ project:
   description: 'A NestJS API'
 
 tasks:
+  install:
+    command: 'pnpm install'
+    inputs:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+    outputs:
+      - 'node_modules/**/*'
+
   build:
     command: 'nest build'
     inputs:

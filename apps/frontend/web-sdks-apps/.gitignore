@@ -9,35 +9,35 @@ dist
 .vercel
 .netlify
 
-# Environment variables
+# # Environment variables
 .env
 .env.*
 !.env.example
 
-# OS
+# # OS
 .DS_Store
 Thumbs.db
 
-# IDE
+# # IDE
 .vscode
 .idea
-*.swp
-*.swo
-*~
+# *.swp
+# *.swo
+# *~
 
-# Testing
-coverage
+# # Testing
+# coverage
 
-# Logs
-logs
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
+# # Logs
+# logs
+# *.log
+# npm-debug.log*
+# pnpm-debug.log*
+# yarn-debug.log*
+# yarn-error.log*
+# lerna-debug.log*
 
-# Misc
-.cache
-.temp
-.tmp
+# # Misc
+# .cache
+# .temp
+# .tmp

@@ -15,6 +15,15 @@ project:
   description: 'A Go Lang API'
 
 tasks:
+  install:
+    command: 'go mod tidy'
+    # inputs:
+    #   - 'go.mod'``
+    #   - 'go.sum'
+    # outputs:
+    #   - 'go.mod'
+    #   - 'go.sum'
+
   build:
     command: 'go build -o bin/api-golang ./cmd/api'
     inputs:
@@ -23,6 +32,16 @@ tasks:
       - 'go.sum'
     outputs:
       - 'bin/api-golang'
+  
+  # test:
+  #   command: 'go test ./...'
+  #   inputs:
+  #     - '**/*.go'
+  #     - 'go.mod'
+  #     - 'go.sum'
+  #   outputs:
+  #     - 'coverage.txt'
+  #     - 'coverage.html'
 
   dev:
     command: 'go run ./cmd/api/main.go'

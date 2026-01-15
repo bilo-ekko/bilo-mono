@@ -14,6 +14,14 @@ project:
   description: 'A SvelteKit application rendering climate action widgets for checkout and post-purchase flows.'
 
 tasks:
+  install:
+    command: pnpm install
+    inputs:
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+    outputs:
+      - 'node_modules/**/*'
+      
   dev:
     command: pnpm dev
     options:

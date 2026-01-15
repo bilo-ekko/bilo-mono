@@ -21,9 +21,7 @@ There is also a [Cheat sheet](https://moonrepo.dev/docs/cheat-sheet) for moon co
 
 ### Getting Setup up
 
-> You can clone said monorepo (in this case [https://github.com/bilo-ekko/bilo-mono](https://github.com/bilo-ekko/bilo-mono)).
-
-Alternatively, if you want to add this to your own monorepo, navigate to it and run:
+To initialise a moon repo requires one command, inside an arbitrary folder which will become the root of the monorepo.
 
 - `moon init` (this creates the [.moon/workspace.yml](.moon/workspace.yml) in your monorepo root)
 
