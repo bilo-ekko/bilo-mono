@@ -1,0 +1,151 @@
+# template.yml
+# Moon v2 generator template configuration
+# Place this file at the root of a named template folder, e.g.:
+# .moon/templates/service-nestjs/template.yml
+
+id: 'service-nestjs'
+
+title: 'NestJS service'
+
+description: |
+  Scaffolds a NestJS TypeScript service with a standard folder structure,
+  configuration files, and optional extras like Docker, CI, and database support.
+
+# Optional: standardize where this template generates.
+# If it starts with '/', it's relative to the workspace root.
+# If not, it's relative to the current working directory.
+# Supports template variables via [varName] syntax.
+destination: '/apps/[stack]/[name]'
+
+# Optional: inherit files + variables from other templates.
+# All files/variables are deeply inherited.
+extends:
+  - 'base'
+  - 'configs'
+
+variables:
+  # ----------------------------
+  # Required basics
+  # ----------------------------
+  name:
+    type: 'string'
+    default: ''
+    required: true
+    prompt: 'Service name (kebab-case)?'
+    order: 1
+
+  # Useful for destination path (apps/backend/<name>, apps/frontend/<name>, etc.)
+  stack:
+    type: 'enum'
+    values:
+      - value: 'backend'
+        label: 'Backend'
+      - value: 'frontend'
+        label: 'Frontend'
+      - value: 'infra'
+        label: 'Infrastructure'
+    default: 'backend'
+    prompt: 'Which stack?'
+    order: 2
+
+  # Layer is common in Moon workspaces; keep it explicit.
+  layer:
+    type: 'enum'
+    values:
+      - value: 'application'
+        label: 'Application'
+      - value: 'library'
+        label: 'Library'
+      - value: 'tooling'
+        label: 'Tooling'
+    default: 'application'
+    prompt: 'Which layer?'
+    order: 3
+
+  # Language is often referenced in generated moon.yml, tsconfig, etc.
+  language:
+    type: 'enum'
+    values:
+      - value: 'typescript'
+        label: 'TypeScript'
+      - value: 'javascript'
+        label: 'JavaScript'
+    default: 'typescript'
+    prompt: 'Language?'
+    order: 4
+
+  # ----------------------------
+  # Primitive examples
+  # ----------------------------
+  port:
+    type: 'number'
+    default: 3000
+    prompt: 'Dev server port?'
+    order: 5
+
+  private:
+    type: 'boolean'
+    default: true
+    prompt: 'Mark package as private?'
+    order: 6
+
+  # Arrays/objects must be JSON-compatible values.
+  # If prompted, user must enter valid JSON.
+  tags:
+    type: 'array'
+    default: ['nestjs', 'node', 'typescript']
+    prompt: 'Project tags (JSON array)? e.g. ["nestjs","api"]'
+    order: 7
+
+  env:
+    type: 'object'
+    default:
+      NODE_ENV: 'development'
+    prompt: 'Default env (JSON object)? e.g. {"NODE_ENV":"development"}'
+    order: 8
+
+  # ----------------------------
+  # Enum (single)
+  # ----------------------------
+  packageManager:
+    type: 'enum'
+    values:
+      - value: 'pnpm'
+        label: 'pnpm'
+      - value: 'npm'
+        label: 'npm'
+      - value: 'yarn'
+        label: 'yarn'
+    default: 'pnpm'
+    prompt: 'Package manager?'
+    order: 9
+
+  # ----------------------------
+  # Enum (multiple)
+  # ----------------------------
+  features:
+    type: 'enum'
+    values:
+      - value: 'docker'
+        label: 'Dockerfile + .dockerignore'
+      - value: 'health'
+        label: 'Healthcheck endpoint'
+      - value: 'swagger'
+        label: 'Swagger/OpenAPI'
+      - value: 'db'
+        label: 'Database module'
+      - value: 'ci'
+        label: 'CI workflow files'
+    multiple: true
+    default: ['health', 'swagger']
+    prompt: 'Select optional features (multi-select)'
+    order: 10
+
+  # ----------------------------
+  # Internal-only variables (not overrideable via CLI)
+  # ----------------------------
+  templateVersion:
+    type: 'string'
+    default: '1'
+    internal: true
+    order: 999

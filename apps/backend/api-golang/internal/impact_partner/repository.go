@@ -16,7 +16,7 @@ func NewRepository() *Repository {
 	repo := &Repository{
 		partners: make(map[string]*Entity),
 	}
-	
+
 	// Seed with sample data
 	repo.partners["1"] = &Entity{
 		ID:       "1",
@@ -33,7 +33,7 @@ func NewRepository() *Repository {
 		Name:     "Green Energy Co",
 		Category: "renewable-energy",
 	}
-	
+
 	return repo
 }
 
@@ -41,7 +41,7 @@ func NewRepository() *Repository {
 func (r *Repository) GetAll() []*Entity {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	
+
 	partners := make([]*Entity, 0, len(r.partners))
 	for _, partner := range r.partners {
 		partners = append(partners, partner)
@@ -53,7 +53,7 @@ func (r *Repository) GetAll() []*Entity {
 func (r *Repository) GetByID(id string) (*Entity, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	
+
 	partner, exists := r.partners[id]
 	if !exists {
 		return nil, errors.New("partner not found")
@@ -65,7 +65,7 @@ func (r *Repository) GetByID(id string) (*Entity, error) {
 func (r *Repository) Create(partner *Entity) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	
+
 	if _, exists := r.partners[partner.ID]; exists {
 		return errors.New("partner already exists")
 	}

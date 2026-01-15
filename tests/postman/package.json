@@ -1,0 +1,15 @@
+{
+  "name": "api-tests",
+  "version": "1.0.0",
+  "description": "API testing suite using Newman/Postman",
+  "private": true,
+  "scripts": {
+    "test": "newman run collection.json",
+    "test:verbose": "newman run collection.json --reporters cli,json,html --reporter-json-export report.json --reporter-html-export report.html",
+    "test:html": "newman run collection.json --reporters cli,html --reporter-html-export report.html && open report.html",
+    "pretest": "echo '⚠️  Make sure both APIs are running: moon run api-nest:dev & moon run api-golang:dev'"
+  },
+  "devDependencies": {
+    "newman": "^6.2.1"
+  }
+}

@@ -1,0 +1,43 @@
+layer: 'application'
+stack: 'frontend'
+language: 'typescript'
+tags:
+  - 'frontend'
+  - 'sveltekit'
+  - 'svelte'
+  - 'typescript'
+  - 'vite'
+  - 'tailwindcss'
+
+project:
+  name: 'SDK UI'
+  description: 'A SvelteKit application rendering climate action widgets for checkout and post-purchase flows.'
+
+tasks:
+  dev:
+    command: pnpm dev
+    options:
+      persistent: true
+      cache: false
+
+  build:
+    command: pnpm build
+    inputs:
+      - 'src/**/*'
+      - 'static/**/*'
+      - 'svelte.config.js'
+      - 'vite.config.ts'
+      - 'tsconfig.json'
+      - 'package.json'
+    outputs:
+      - '.svelte-kit/**/*'
+      - 'build/**/*'
+  
+  check:
+    command: pnpm check
+    inputs:
+      - 'src/**/*'
+      - 'tsconfig.json'
+  
+  preview:
+    command: pnpm preview

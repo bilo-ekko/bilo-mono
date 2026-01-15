@@ -1,0 +1,46 @@
+id: 'ts-shared-package'
+
+title: 'Shared TypeScript package (npm)'
+
+description: |
+  Scaffolds a shared TypeScript package under /common/packages/[name].
+  Includes src/, tsconfig, package.json, and a Moon project config.
+
+destination: '/common/packages/[name]'
+
+variables:
+  name:
+    type: 'string'
+    default: ''
+    required: true
+    prompt: 'Package name (kebab-case, e.g. shared-utils)?'
+    order: 1
+
+  scope:
+    type: 'string'
+    default: '@ekko'
+    prompt: 'NPM scope (e.g. @ekko)?'
+    order: 2
+
+  description:
+    type: 'string'
+    default: 'Shared TypeScript package'
+    prompt: 'Package description?'
+    order: 3
+
+  entryFile:
+    type: 'string'
+    default: 'src/index.ts'
+    prompt: 'Entry file?'
+    order: 4
+
+  publishAccess:
+    type: 'enum'
+    values:
+      - value: 'public'
+        label: 'public'
+      - value: 'restricted'
+        label: 'restricted'
+    default: 'restricted'
+    prompt: 'Publish access?'
+    order: 5

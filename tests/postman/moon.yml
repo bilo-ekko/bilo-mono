@@ -1,20 +1,46 @@
 layer: 'automation'
+language: 'javascript'
 
 project:
-  name: 'Postman Tests'
-  description: 'A collection of Postman tests'
+  name: 'API Tests'
+  description: 'Postman/Newman API test collection'
 
 tasks:
-  dev:
-    command: 'newman run tests/postman/collection.json'
+  install:
+    command: 'npm install'
     inputs:
-      - 'tests/postman/collection.json'
+      - 'package.json'
     outputs:
-      - 'tests/postman/results.json'
+      - 'node_modules'
 
   test:
-    command: 'newman run tests/postman/collection.json'
+    command: 'npm test'
     inputs:
-      - 'tests/postman/collection.json'
+      - 'collection.json'
+      - 'package.json'
+    deps:
+      - '~:install'
+
+  test-verbose:
+    command: 'npm run test:verbose'
+    inputs:
+      - 'collection.json'
+      - 'package.json'
+    deps:
+      - '~:install'
+
+  test-html:
+    command: 'npm run test:html'
+    inputs:
+      - 'collection.json'
+      - 'package.json'
     outputs:
-      - 'tests/postman/results.json'
+      - 'report.html'
+    deps:
+      - '~:install'
+
+  test-script:
+    command: './test.sh'
+    inputs:
+      - 'collection.json'
+      - 'test.sh'

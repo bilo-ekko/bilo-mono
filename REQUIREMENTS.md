@@ -6,4 +6,4 @@ scripts to run from root:
 - [ ] dev
 - [ ] test
 
-
+test from a performance and size perspective

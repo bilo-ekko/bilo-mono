@@ -1,5 +1,13 @@
 layer: 'application'
-language: 'javascript'
+stack: 'frontend'
+language: 'typescript'
+
+tags:
+  - 'frontend'
+  - 'nextjs'
+  - 'react'
+  - 'tailwindcss'
+  - 'typescript'
 
 project:
   name: 'Next.js Dashboard'
@@ -8,6 +16,9 @@ project:
 tasks:
   dev:
     command: 'pnpm dev'
+    options:
+      persistent: true
+      cache: false
     inputs:
       - 'src/**/*'
     outputs:

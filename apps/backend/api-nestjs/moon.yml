@@ -1,0 +1,97 @@
+layer: 'application'
+stack: 'backend'
+language: 'typescript'
+tags:
+  - 'backend'
+  - 'nestjs'
+  - 'typescript'
+  - 'javascript'
+  - 'json'
+  - 'yaml'
+  - 'markdown'
+  - 'git'
+# type: 'application'
+
+project:
+  name: 'NestJS API'
+  description: 'A NestJS API'
+
+tasks:
+  build:
+    command: 'nest build'
+    inputs:
+      - 'src/**/*'
+      - 'tsconfig.json'
+      - 'tsconfig.build.json'
+      - 'nest-cli.json'
+      - 'package.json'
+    outputs:
+      - 'dist'
+
+  dev:
+    # command: 'nest start --watch' # NOTE: this launches nest in watch mode, but hides all the other application logs of your monorepo
+    command: 'nest start'
+    options:
+      persistent: true
+      cache: false
+    inputs:
+      - 'src/**/*'
+      - 'tsconfig.json'
+      - 'nest-cli.json'
+      - 'package.json'
+
+  start:
+    command: 'nest start'
+    inputs:
+      - 'dist/**/*'
+    deps:
+      - '~:build'
+
+  start-prod:
+    command: 'node dist/main'
+    inputs:
+      - 'dist/**/*'
+    deps:
+      - '~:build'
+
+  test:
+    command: 'jest'
+    inputs:
+      - 'src/**/*'
+      - 'test/**/*'
+      - 'tsconfig.json'
+      - 'package.json'
+
+  test-watch:
+    command: 'jest --watch'
+    inputs:
+      - 'src/**/*'
+      - 'test/**/*'
+
+  test-cov:
+    command: 'jest --coverage'
+    inputs:
+      - 'src/**/*'
+      - 'test/**/*'
+    outputs:
+      - 'coverage'
+
+  test-e2e:
+    command: 'jest --config ./test/jest-e2e.json'
+    inputs:
+      - 'src/**/*'
+      - 'test/**/*'
+
+  lint:
+    command: 'eslint "{src,apps,libs,test}/**/*.ts" --fix'
+    inputs:
+      - 'src/**/*'
+      - 'test/**/*'
+      - 'eslint.config.mjs'
+      - 'package.json'
+
+  format:
+    command: 'prettier --write "src/**/*.ts" "test/**/*.ts"'
+    inputs:
+      - 'src/**/*.ts'
+      - 'test/**/*.ts'

@@ -1,5 +1,14 @@
 layer: 'application'
+stack: 'backend'
 language: 'go'
+
+tags:
+  - 'backend'
+  - 'go'
+  - 'golang'
+  - 'api'
+  - 'rest'
+  - 'http'
 
 project:
   name: 'Go API'
@@ -17,6 +26,9 @@ tasks:
 
   dev:
     command: 'go run ./cmd/api/main.go'
+    options:
+      persistent: true
+      cache: false
     inputs:
       - '**/*.go'
       - 'go.mod'

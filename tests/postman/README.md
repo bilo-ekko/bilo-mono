@@ -44,46 +44,116 @@ Each request includes at least one unit test:
 
 ### Prerequisites
 
-1. **Postman Desktop App** or **Postman CLI** installed
-2. Both backend servers running:
-   ```bash
-   # Terminal 1 - Start NestJS API (port 3000)
-   moon run api-nest:dev
-   
-   # Terminal 2 - Start Go API (port 8080)
-   moon run api-golang:dev
-   ```
+Both backend servers must be running:
+```bash
+# Terminal 1 - Start NestJS API (port 3000)
+moon run api-nest:dev
 
-### Option 1: Using Postman Desktop App
+# Terminal 2 - Start Go API (port 8080)
+moon run api-golang:dev
+```
+
+---
+
+## 🧪 Running Tests
+
+### Method 1: Using the Test Script (Recommended) ⭐
+
+**From the repo root:**
+```bash
+./tests/postman/test.sh
+```
+
+**From the tests/postman folder:**
+```bash
+cd tests/postman
+./test.sh
+```
+
+The script will:
+- ✅ Check if Newman is installed (installs if needed)
+- ✅ Verify both APIs are running
+- ✅ Run all tests with nice output
+- ✅ Show pass/fail summary
+
+**With additional Newman options:**
+```bash
+./tests/postman/test.sh --reporters cli,html --reporter-html-export report.html
+```
+
+---
+
+### Method 2: Using NPM Scripts
+
+**From the repo root:**
+```bash
+cd tests/postman
+npm install  # First time only
+npm test
+```
+
+**Available scripts:**
+```bash
+npm test              # Run tests with default output
+npm run test:verbose  # Run with JSON and HTML reports
+npm run test:html     # Run and auto-open HTML report
+```
+
+---
+
+### Method 3: Using Moon Tasks
+
+**From anywhere in the repo:**
+```bash
+# Run basic tests
+moon run postman:test
+
+# Run with verbose output and reports
+moon run postman:test-verbose
+
+# Run and generate HTML report
+moon run postman:test-html
+
+# Use the shell script
+moon run postman:test-script
+```
+
+---
+
+### Method 4: Using Newman Directly
+
+**Install Newman globally (one time):**
+```bash
+npm install -g newman
+```
+
+**From repo root:**
+```bash
+newman run tests/postman/collection.json
+```
+
+**From tests/postman folder:**
+```bash
+cd tests/postman
+newman run collection.json
+```
+
+**With options:**
+```bash
+newman run tests/postman/collection.json \
+  --reporters cli,html \
+  --reporter-html-export report.html
+```
+
+---
+
+### Method 5: Using Postman Desktop App
 
 1. Open Postman
 2. Click **Import** in the top-left
 3. Select the `collection.json` file
 4. The collection will appear in your sidebar
 5. Click the **Run** button to execute all tests
-
-### Option 2: Using Postman CLI (Newman)
-
-Install Newman (Postman CLI):
-```bash
-npm install -g newman
-```
-
-Run the collection:
-```bash
-# Run all tests
-newman run tests/postman/collection.json
-
-# Run with detailed output
-newman run tests/postman/collection.json --reporters cli,json
-
-# Run and generate HTML report
-newman run tests/postman/collection.json --reporters html --reporter-html-export report.html
-```
-
-### Option 3: Using VS Code REST Client
-
-If you prefer VS Code, you can use the REST Client extension with the examples in the collection.
 
 ## 📊 Environment Variables
 
@@ -98,6 +168,25 @@ To customize these:
 1. In Postman, go to **Environments**
 2. Create a new environment or edit existing
 3. Add these variables with your custom values
+
+## 📝 Quick Reference
+
+### From Repo Root
+```bash
+./tests/postman/test.sh                    # Easiest way
+cd tests/postman && npm test               # NPM
+moon run postman:test                      # Moon
+newman run tests/postman/collection.json   # Direct Newman
+```
+
+### From tests/postman Folder
+```bash
+./test.sh                                  # Shell script
+npm test                                   # NPM
+newman run collection.json                 # Newman
+```
+
+---
 
 ## 🧪 Test Structure
 

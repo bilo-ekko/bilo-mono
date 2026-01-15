@@ -1,0 +1,41 @@
+# {{ scope }}/{{ name }}
+
+{{ description }}
+
+## Usage
+
+```ts
+import { hello } from '{{ scope }}/{{ name }}';
+
+console.log(hello());
+```
+
+
+## `moon.yml.tmpl` (project config)
+
+```yml
+layer: 'library'
+stack: 'shared'
+language: 'typescript'
+tags:
+  - 'typescript'
+  - 'npm'
+  - 'shared'
+
+tasks:
+  build:
+    command: 'pnpm'
+    args: ['build']
+    outputs:
+      - 'dist/**/*'
+
+  typecheck:
+    command: 'pnpm'
+    args: ['typecheck']
+
+  test:
+    command: 'pnpm'
+    args: ['test']
+    options:
+      cache: false
+```

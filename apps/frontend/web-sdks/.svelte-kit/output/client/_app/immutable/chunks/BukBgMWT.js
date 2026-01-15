@@ -1,3 +1,0 @@
-import{D as c}from"./KthFeat2.js";function l(t){if(c){const e=new Error(`lifecycle_outside_component
-\`${t}(...)\` can only be used during component initialisation
-https://svelte.dev/e/lifecycle_outside_component`);throw e.name="Svelte error",e}else throw new Error("https://svelte.dev/e/lifecycle_outside_component")}var n=null;function s(t){n=t}function p(t){return r("getContext").get(t)}function a(t,e){return r("setContext").set(t,e),e}function r(t){return n===null&&l(t),n.c??(n.c=new Map(i(n)||void 0))}function f(t){var e;n={p:n,c:null,r:null},c&&(n.function=t,n.element=(e=n.p)==null?void 0:e.element)}function _(){n=n.p}function i(t){let e=t.p;for(;e!==null;){const o=e.c;if(o!==null)return o;e=e.p}return null}export{n as a,_ as b,a as c,p as g,f as p,s};
