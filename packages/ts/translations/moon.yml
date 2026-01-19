@@ -1,0 +1,19 @@
+type: 'library'
+language: 'typescript'
+
+project:
+  name: 'ts-translations'
+  description: 'Internationalization package for bilo-mono'
+
+tasks:
+  build:
+    command: 'tsc'
+    inputs:
+      - 'src/**/*'
+      - 'tsconfig.json'
+    outputs:
+      - 'dist'
+
+  dev:
+    command: 'tsc --watch'
+    local: true

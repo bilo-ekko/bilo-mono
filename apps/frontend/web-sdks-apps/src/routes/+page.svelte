@@ -1,12 +1,19 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { createTranslator, isValidLocale } from '@bilo/translations';
+	
+	// Get locale from query string parameter, fallback to en-GB
+	$: localeParam = $page.url.searchParams.get('locale');
+	$: locale = localeParam && isValidLocale(localeParam) ? localeParam : 'en-GB';
+	$: t = createTranslator(locale);
 </script>
 
 <main class="container">
-	<h1>Ekko SDK Demo</h1>
-	<p>Choose a page to view:</p>
+	<h1>{t('sdks.home.heading')}</h1>
+	<p>{t('sdks.home.description')}</p>
 	<nav class="nav">
-		<a href="/checkout" class="nav-link">Checkout Widget</a>
-		<a href="/post-purchase" class="nav-link">Post-Purchase Widget</a>
+		<a href="/checkout" class="nav-link">{t('sdks.home.checkoutLink')}</a>
+		<a href="/post-purchase" class="nav-link">{t('sdks.home.postPurchaseLink')}</a>
 	</nav>
 </main>
 

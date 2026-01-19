@@ -1,0 +1,94 @@
+{
+  "common": {
+    "welcome": "Willkommen",
+    "hello": "Hallo",
+    "goodbye": "Auf Wiedersehen",
+    "yes": "Ja",
+    "no": "Nein",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "update": "Aktualisieren",
+    "search": "Suchen",
+    "loading": "Lädt...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "learnMore": "Mehr erfahren",
+    "poweredBy": "Bereitgestellt von",
+    "with": "mit"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "logout": "Abmelden"
+  },
+  "errors": {
+    "notFound": "Nicht gefunden",
+    "unauthorized": "Nicht autorisiert",
+    "serverError": "Serverfehler",
+    "networkError": "Netzwerkfehler",
+    "validationError": "Validierungsfehler"
+  },
+  "validation": {
+    "required": "Dieses Feld ist erforderlich",
+    "invalidEmail": "Ungültige E-Mail-Adresse",
+    "minLength": "Mindestlänge beträgt {{min}} Zeichen",
+    "maxLength": "Maximale Länge beträgt {{max}} Zeichen"
+  },
+  "dashboard": {
+    "meta": {
+      "title": "Next-App erstellen",
+      "description": "Generiert von create next app"
+    },
+    "hero": {
+      "heading": "Zum Einstieg bearbeiten Sie die Datei page.tsx.",
+      "description": "Suchen Sie nach einem Ausgangspunkt oder weiteren Anweisungen? Besuchen Sie {{templatesLink}} oder das {{learningLink}}-Center.",
+      "templatesLinkText": "Vorlagen",
+      "learningLinkText": "Lern"
+    },
+    "actions": {
+      "deployNow": "Jetzt bereitstellen",
+      "documentation": "Dokumentation"
+    },
+    "imageAlt": {
+      "nextjsLogo": "Next.js-Logo",
+      "vercelLogomark": "Vercel-Logomarke"
+    }
+  },
+  "sdks": {
+    "meta": {
+      "homeTitle": "Ekko SDK-Demo",
+      "checkoutTitle": "Checkout | Ekko SDK",
+      "postPurchaseTitle": "Nach dem Kauf | Ekko SDK"
+    },
+    "home": {
+      "heading": "Ekko SDK-Demo",
+      "description": "Wählen Sie eine Seite zum Anzeigen:",
+      "checkoutLink": "Checkout-Widget",
+      "postPurchaseLink": "Nach-dem-Kauf-Widget"
+    },
+    "checkout": {
+      "title": "Gib ein wenig. Verändere viel.",
+      "subtitle": "Unterstützen Sie {{environmentalProjects}} und handeln Sie auf den ~{{carbonFootprint}} kgCO{{subscript}}-Fußabdruck dieses Kaufs - ungefähr das, was {{tree}} in {{year}} aufnehmen kann!",
+      "environmentalProjects": "Umweltprojekte",
+      "tree": "1 Baum",
+      "year": "1 Jahr",
+      "climateAction": "Klimaschutz unterstützen",
+      "roundUp": "Aufrunden, um die Wirkung zu erhöhen",
+      "thankYou": "Vielen Dank! Gemeinsam bewirken wir echte Veränderung.",
+      "imageAlt": "Schneebedeckter Berggipfel"
+    },
+    "postPurchase": {
+      "title": "Gib ein wenig. Verändere viel.",
+      "description": "Unterstützen Sie Klimaprojekte und handeln Sie auf den CO2-Fußabdruck dieses Kaufs (~{{carbonFootprint}} kgCO2e).",
+      "findOutMore": "Mehr erfahren",
+      "embeddedSdk": "Eingebettetes SDK",
+      "imageAlt": "Dichtes Walddach von oben",
+      "moreInformation": "Weitere Informationen"
+    }
+  }
+}

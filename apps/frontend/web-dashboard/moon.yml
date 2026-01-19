@@ -1,6 +1,10 @@
 layer: 'application'
 stack: 'frontend'
 language: 'typescript'
+# dependsOn:
+#   - 'ts-translations'
+#   - id: ''
+#     scope: 'peer'
 
 tags:
   - 'frontend'

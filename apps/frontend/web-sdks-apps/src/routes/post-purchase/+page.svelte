@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { createTranslator, isValidLocale } from '@bilo/translations';
 	import PostPurchaseWidget from '$lib/components/PostPurchaseWidget.svelte';
+	
+	// Get locale from query string parameter, fallback to en-GB
+	$: localeParam = $page.url.searchParams.get('locale');
+	$: locale = localeParam && isValidLocale(localeParam) ? localeParam : 'en-GB';
+	$: t = createTranslator(locale);
 </script>
 
 <svelte:head>
-	<title>Post-Purchase | Ekko SDK</title>
+	<title>{t('sdks.meta.postPurchaseTitle')}</title>
 </svelte:head>
 
 <main class="page">

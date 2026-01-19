@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { createTranslator, isValidLocale } from '@bilo/translations';
 	import CheckoutWidget from '$lib/components/CheckoutWidget.svelte';
+	
+	// Get locale from query string parameter, fallback to en-GB
+	$: localeParam = $page.url.searchParams.get('locale');
+	$: locale = localeParam && isValidLocale(localeParam) ? localeParam : 'en-GB';
+	$: t = createTranslator(locale);
 </script>
 
 <svelte:head>
-	<title>Checkout | Ekko SDK</title>
+	<title>{t('sdks.meta.checkoutTitle')}</title>
 </svelte:head>
 
 <main class="page">

@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { createTranslator, isValidLocale } from '@bilo/translations';
 	import Toggle from './Toggle.svelte';
 	import EkkoLogo from './EkkoLogo.svelte';
 	import GoldStandardLogo from './GoldStandardLogo.svelte';
 	import PartnerLogos from './PartnerLogos.svelte';
+
+	// Get locale from query string parameter, fallback to en-GB
+	let localeParam = $derived($page.url.searchParams.get('locale'));
+	let locale = $derived(localeParam && isValidLocale(localeParam) ? localeParam : 'en-GB');
+	let t = $derived(createTranslator(locale));
 
 	let climateActionEnabled = $state(true);
 	let roundUpEnabled = $state(false);
@@ -17,20 +24,20 @@
 <article class="widget">
 	<div class="widget-content">
 		<div class="image-section">
-			<img
-				src="https://images.unsplash.com/photo-1529963183134-61a90db47eaf?w=400&h=500&fit=crop&q=80"
-				alt="Snow-capped mountain peak"
-				loading="lazy"
-			/>
+		<img
+			src="https://images.unsplash.com/photo-1529963183134-61a90db47eaf?w=400&h=500&fit=crop&q=80"
+			alt={t('sdks.checkout.imageAlt')}
+			loading="lazy"
+		/>
 		</div>
 		
 		<div class="content-section">
 			<header class="header">
-				<h2 class="title">Give a little. Change a lot.</h2>
+				<h2 class="title">{t('sdks.checkout.title')}</h2>
 				<p class="subtitle">
-					Support <span class="highlight">environmental projects</span> and act on the ~{carbonFootprint}
-					kgCO<sub>2</sub>e footprint of this purchase - about what <span class="highlight">1 tree</span>
-					can capture in <span class="highlight">1 year</span>!
+					Support <span class="highlight">{t('sdks.checkout.environmentalProjects')}</span> and act on the ~{carbonFootprint}
+					kgCO<sub>2</sub>e footprint of this purchase - about what <span class="highlight">{t('sdks.checkout.tree')}</span>
+					can capture in <span class="highlight">{t('sdks.checkout.year')}</span>!
 				</p>
 			</header>
 
@@ -38,11 +45,11 @@
 				<div class="option">
 					<div class="option-content">
 						<div class="option-header">
-							<span class="option-title">Support climate action</span>
+							<span class="option-title">{t('sdks.checkout.climateAction')}</span>
 							<span class="option-price">£{climateActionCost.toFixed(2)}</span>
 						</div>
 						<div class="option-partner">
-							<span class="with-text">with</span>
+							<span class="with-text">{t('common.with')}</span>
 							<GoldStandardLogo />
 						</div>
 					</div>
@@ -52,11 +59,11 @@
 				<div class="option">
 					<div class="option-content">
 						<div class="option-header">
-							<span class="option-title">Round up to boost impact</span>
+							<span class="option-title">{t('sdks.checkout.roundUp')}</span>
 							<span class="option-price">£{roundUpCost.toFixed(2)}</span>
 						</div>
 						<div class="option-partner">
-							<span class="with-text">with</span>
+							<span class="with-text">{t('common.with')}</span>
 							<PartnerLogos />
 						</div>
 					</div>
@@ -65,9 +72,9 @@
 			</div>
 
 			<footer class="footer">
-				<a href="#learn" class="learn-more">Learn more</a>
+				<a href="#learn" class="learn-more">{t('common.learnMore')}</a>
 				<div class="powered-by">
-					<span>Powered by</span>
+					<span>{t('common.poweredBy')}</span>
 					<EkkoLogo size="sm" />
 				</div>
 			</footer>
@@ -75,7 +82,7 @@
 	</div>
 	
 	<div class="thank-you" class:active={isActive}>
-		<span>Thank you! Together, we're creating real change.</span>
+		<span>{t('sdks.checkout.thankYou')}</span>
 		<span class="leaf">🌿</span>
 	</div>
 </article>

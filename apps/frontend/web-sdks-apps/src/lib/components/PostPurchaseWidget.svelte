@@ -1,5 +1,12 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { createTranslator, isValidLocale } from '@bilo/translations';
 	import EkkoLogo from './EkkoLogo.svelte';
+	
+	// Get locale from query string parameter, fallback to en-GB
+	let localeParam = $derived($page.url.searchParams.get('locale'));
+	let locale = $derived(localeParam && isValidLocale(localeParam) ? localeParam : 'en-GB');
+	let t = $derived(createTranslator(locale));
 	
 	const carbonFootprint = 21;
 	
@@ -16,7 +23,7 @@
 	<div class="background-image">
 		<img
 			src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=1200&h=600&fit=crop&q=80"
-			alt="Dense forest canopy from above"
+			alt={t('sdks.postPurchase.imageAlt')}
 			loading="lazy"
 		/>
 	</div>
@@ -24,15 +31,16 @@
 	<div class="widget-content">
 		<div class="card">
 			<div class="card-content">
-				<h2 class="title">Give a little. Change a lot.</h2>
+				<h2 class="title">{t('sdks.postPurchase.title')}</h2>
 				<p class="description">
-					Support climate projects and act on the carbon
-					footprint of this purchase (~{carbonFootprint} kgCO2e).
+					{t('sdks.postPurchase.description', {
+						carbonFootprint: carbonFootprint.toString()
+					})}
 				</p>
 			</div>
 		</div>
 		
-		<button class="info-button" onclick={handleInfoClick} aria-label="More information">
+		<button class="info-button" onclick={handleInfoClick} aria-label={t('sdks.postPurchase.moreInformation')}>
 			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18Z" stroke="currentColor" stroke-width="1.5"/>
 				<path d="M10 14V10M10 6H10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -42,19 +50,19 @@
 	
 	<footer class="footer">
 		<div class="powered-by">
-			<span>Powered by</span>
+			<span>{t('common.poweredBy')}</span>
 			<EkkoLogo size="md" />
 		</div>
 		
 		<button class="cta-button" onclick={handleFindOutMore}>
-			<span>Find out more</span>
+			<span>{t('sdks.postPurchase.findOutMore')}</span>
 			<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 			</svg>
 		</button>
 	</footer>
 	
-	<div class="label">Embedded SDK</div>
+	<div class="label">{t('sdks.postPurchase.embeddedSdk')}</div>
 </article>
 
 <style>
