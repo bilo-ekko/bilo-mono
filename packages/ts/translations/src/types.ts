@@ -26,6 +26,10 @@ export interface TranslationDictionary {
     learnMore: string;
     poweredBy: string;
     with: string;
+    theme: string;
+    language: string;
+    show: string;
+    hide: string;
   };
   navigation: {
     home: string;
@@ -33,6 +37,15 @@ export interface TranslationDictionary {
     settings: string;
     profile: string;
     logout: string;
+    organisation: string;
+    console: string;
+    documentation: string;
+    marketingToolkit: string;
+    sections: {
+      management: string;
+      developer: string;
+      resources: string;
+    };
   };
   errors: {
     notFound: string;
@@ -65,6 +78,119 @@ export interface TranslationDictionary {
     imageAlt: {
       nextjsLogo: string;
       vercelLogomark: string;
+    };
+    pages: {
+      dashboard: {
+        title: string;
+        description: string;
+        cardTitle: string;
+        cardDescription: string;
+      };
+      organisation: {
+        title: string;
+        description: string;
+        tabs: {
+          info: string;
+          hierarchy: string;
+          users: string;
+        };
+        info: {
+          basicInformation: string;
+          organisationName: string;
+          organisationNamePlaceholder: string;
+          legalName: string;
+          legalNamePlaceholder: string;
+          billingAddress: string;
+          streetAddress: string;
+          streetAddressPlaceholder: string;
+          city: string;
+          cityPlaceholder: string;
+          postalCode: string;
+          postalCodePlaceholder: string;
+          country: string;
+          countryPlaceholder: string;
+          contactInformation: string;
+          email: string;
+          emailPlaceholder: string;
+          phoneNumber: string;
+          phoneNumberPlaceholder: string;
+          saveChanges: string;
+        };
+        hierarchy: {
+          organisationStructure: string;
+          description: string;
+          chartPlaceholder: string;
+          departments: string;
+          departmentsDescription: string;
+        };
+        users: {
+          usersList: string;
+          addUser: string;
+          description: string;
+          rolesPermissions: string;
+          rolesDescription: string;
+        };
+      };
+      console: {
+        title: string;
+        description: string;
+        apiKeys: {
+          title: string;
+          description: string;
+        };
+        webhooks: {
+          title: string;
+          description: string;
+        };
+        logs: {
+          title: string;
+          description: string;
+        };
+      };
+      documentation: {
+        title: string;
+        description: string;
+        gettingStarted: {
+          title: string;
+          description: string;
+          readMore: string;
+        };
+        apiReference: {
+          title: string;
+          description: string;
+          readMore: string;
+        };
+        sdksLibraries: {
+          title: string;
+          description: string;
+          readMore: string;
+        };
+        tutorials: {
+          title: string;
+          description: string;
+          readMore: string;
+        };
+      };
+      marketingToolkit: {
+        title: string;
+        description: string;
+        brandAssets: {
+          title: string;
+          description: string;
+          downloadLogos: string;
+          viewGuidelines: string;
+        };
+        socialMediaTemplates: {
+          title: string;
+          description: string;
+          browseTemplates: string;
+        };
+        emailTemplates: {
+          title: string;
+          description: string;
+          viewTemplates: string;
+        };
+      };
     };
   };
   sdks: {

@@ -17,14 +17,27 @@
     "success": "Success",
     "learnMore": "Learn more",
     "poweredBy": "Powered by",
-    "with": "with"
+    "with": "with",
+    "theme": "Theme",
+    "language": "Language",
+    "show": "Show",
+    "hide": "Hide"
   },
   "navigation": {
     "home": "Home",
     "dashboard": "Dashboard",
     "settings": "Settings",
     "profile": "Profile",
-    "logout": "Log Out"
+    "logout": "Log Out",
+    "organisation": "Organisation",
+    "console": "Console",
+    "documentation": "Documentation",
+    "marketingToolkit": "Marketing Toolkit",
+    "sections": {
+      "management": "Management",
+      "developer": "Developer",
+      "resources": "Resources"
+    }
   },
   "errors": {
     "notFound": "Not found",
@@ -57,6 +70,119 @@
     "imageAlt": {
       "nextjsLogo": "Next.js logo",
       "vercelLogomark": "Vercel logomark"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "Welcome to your dashboard. This is a placeholder page.",
+        "cardTitle": "Card {{number}}",
+        "cardDescription": "This is a placeholder card component."
+      },
+      "organisation": {
+        "title": "Organisation",
+        "description": "Manage your organisation settings, users, and hierarchy.",
+        "tabs": {
+          "info": "Info",
+          "hierarchy": "Hierarchy",
+          "users": "Users"
+        },
+        "info": {
+          "basicInformation": "Basic Information",
+          "organisationName": "Organisation Name",
+          "organisationNamePlaceholder": "Enter organisation name",
+          "legalName": "Legal Name",
+          "legalNamePlaceholder": "Enter legal name",
+          "billingAddress": "Billing Address",
+          "streetAddress": "Street Address",
+          "streetAddressPlaceholder": "Enter street address",
+          "city": "City",
+          "cityPlaceholder": "City",
+          "postalCode": "Postal Code",
+          "postalCodePlaceholder": "Postal code",
+          "country": "Country",
+          "countryPlaceholder": "Country",
+          "contactInformation": "Contact Information",
+          "email": "Email",
+          "emailPlaceholder": "contact@example.com",
+          "phoneNumber": "Phone Number",
+          "phoneNumberPlaceholder": "+44 20 1234 5678",
+          "saveChanges": "Save Changes"
+        },
+        "hierarchy": {
+          "organisationStructure": "Organisation Structure",
+          "description": "View and manage your organisation's hierarchical structure, departments, and reporting lines.",
+          "chartPlaceholder": "Organisation chart will be displayed here",
+          "departments": "Departments",
+          "departmentsDescription": "Manage departments, teams, and organisational units."
+        },
+        "users": {
+          "usersList": "Users List",
+          "addUser": "Add User",
+          "description": "User management functionality will be implemented here. View, edit, and manage user accounts and permissions.",
+          "rolesPermissions": "Roles & Permissions",
+          "rolesDescription": "Configure user roles and permission levels for different team members."
+        }
+      },
+      "console": {
+        "title": "Developer Console",
+        "description": "Access developer tools and API integrations. This is a placeholder page.",
+        "apiKeys": {
+          "title": "API Keys",
+          "description": "Manage your API keys and access tokens."
+        },
+        "webhooks": {
+          "title": "Webhooks",
+          "description": "Configure webhooks for real-time event notifications."
+        },
+        "logs": {
+          "title": "Logs",
+          "description": "View application logs and debugging information."
+        }
+      },
+      "documentation": {
+        "title": "Documentation",
+        "description": "Browse API documentation and integration guides. This is a placeholder page.",
+        "gettingStarted": {
+          "title": "Getting Started",
+          "description": "Quick start guide to integrate with our platform.",
+          "readMore": "Read more →"
+        },
+        "apiReference": {
+          "title": "API Reference",
+          "description": "Complete reference for all API endpoints and methods.",
+          "readMore": "Read more →"
+        },
+        "sdksLibraries": {
+          "title": "SDKs & Libraries",
+          "description": "Official SDKs for popular programming languages.",
+          "readMore": "Read more →"
+        },
+        "tutorials": {
+          "title": "Tutorials",
+          "description": "Step-by-step tutorials and use case examples.",
+          "readMore": "Read more →"
+        }
+      },
+      "marketingToolkit": {
+        "title": "Marketing Toolkit",
+        "description": "Access marketing materials, brand assets, and promotional tools. This is a placeholder page.",
+        "brandAssets": {
+          "title": "Brand Assets",
+          "description": "Download logos, brand guidelines, and visual assets.",
+          "downloadLogos": "Download Logos",
+          "viewGuidelines": "View Guidelines"
+        },
+        "socialMediaTemplates": {
+          "title": "Social Media Templates",
+          "description": "Pre-designed templates for social media posts and campaigns.",
+          "browseTemplates": "Browse Templates"
+        },
+        "emailTemplates": {
+          "title": "Email Templates",
+          "description": "Customizable email templates for marketing campaigns.",
+          "viewTemplates": "View Templates"
+        }
+      }
     }
   },
   "sdks": {

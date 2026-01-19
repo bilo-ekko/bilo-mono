@@ -17,14 +17,27 @@
     "success": "Erfolg",
     "learnMore": "Mehr erfahren",
     "poweredBy": "Bereitgestellt von",
-    "with": "mit"
+    "with": "mit",
+    "theme": "Thema",
+    "language": "Sprache",
+    "show": "Anzeigen",
+    "hide": "Ausblenden"
   },
   "navigation": {
     "home": "Startseite",
     "dashboard": "Dashboard",
     "settings": "Einstellungen",
     "profile": "Profil",
-    "logout": "Abmelden"
+    "logout": "Abmelden",
+    "organisation": "Organisation",
+    "console": "Konsole",
+    "documentation": "Dokumentation",
+    "marketingToolkit": "Marketing-Toolkit",
+    "sections": {
+      "management": "Verwaltung",
+      "developer": "Entwickler",
+      "resources": "Ressourcen"
+    }
   },
   "errors": {
     "notFound": "Nicht gefunden",
@@ -57,6 +70,119 @@
     "imageAlt": {
       "nextjsLogo": "Next.js-Logo",
       "vercelLogomark": "Vercel-Logomarke"
+    },
+    "pages": {
+      "dashboard": {
+        "title": "Dashboard",
+        "description": "Willkommen zu Ihrem Dashboard. Dies ist eine Platzhalterseite.",
+        "cardTitle": "Karte {{number}}",
+        "cardDescription": "Dies ist eine Platzhalter-Kartenkomponente."
+      },
+      "organisation": {
+        "title": "Organisation",
+        "description": "Verwalten Sie Ihre Organisationseinstellungen, Benutzer und Hierarchie.",
+        "tabs": {
+          "info": "Info",
+          "hierarchy": "Hierarchie",
+          "users": "Benutzer"
+        },
+        "info": {
+          "basicInformation": "Grundlegende Informationen",
+          "organisationName": "Organisationsname",
+          "organisationNamePlaceholder": "Organisationsname eingeben",
+          "legalName": "Rechtlicher Name",
+          "legalNamePlaceholder": "Rechtlichen Namen eingeben",
+          "billingAddress": "Rechnungsadresse",
+          "streetAddress": "Straßenadresse",
+          "streetAddressPlaceholder": "Straßenadresse eingeben",
+          "city": "Stadt",
+          "cityPlaceholder": "Stadt",
+          "postalCode": "Postleitzahl",
+          "postalCodePlaceholder": "Postleitzahl",
+          "country": "Land",
+          "countryPlaceholder": "Land",
+          "contactInformation": "Kontaktinformationen",
+          "email": "E-Mail",
+          "emailPlaceholder": "kontakt@beispiel.de",
+          "phoneNumber": "Telefonnummer",
+          "phoneNumberPlaceholder": "+49 30 1234 5678",
+          "saveChanges": "Änderungen speichern"
+        },
+        "hierarchy": {
+          "organisationStructure": "Organisationsstruktur",
+          "description": "Zeigen Sie die hierarchische Struktur, Abteilungen und Berichtslinien Ihrer Organisation an und verwalten Sie sie.",
+          "chartPlaceholder": "Organisationsdiagramm wird hier angezeigt",
+          "departments": "Abteilungen",
+          "departmentsDescription": "Verwalten Sie Abteilungen, Teams und Organisationseinheiten."
+        },
+        "users": {
+          "usersList": "Benutzerliste",
+          "addUser": "Benutzer hinzufügen",
+          "description": "Die Benutzerverwaltungsfunktion wird hier implementiert. Benutzerkonten und Berechtigungen anzeigen, bearbeiten und verwalten.",
+          "rolesPermissions": "Rollen & Berechtigungen",
+          "rolesDescription": "Konfigurieren Sie Benutzerrollen und Berechtigungsstufen für verschiedene Teammitglieder."
+        }
+      },
+      "console": {
+        "title": "Entwickler-Konsole",
+        "description": "Zugriff auf Entwicklertools und API-Integrationen. Dies ist eine Platzhalterseite.",
+        "apiKeys": {
+          "title": "API-Schlüssel",
+          "description": "Verwalten Sie Ihre API-Schlüssel und Zugriffstoken."
+        },
+        "webhooks": {
+          "title": "Webhooks",
+          "description": "Konfigurieren Sie Webhooks für Echtzeit-Ereignisbenachrichtigungen."
+        },
+        "logs": {
+          "title": "Protokolle",
+          "description": "Anwendungsprotokolle und Debugging-Informationen anzeigen."
+        }
+      },
+      "documentation": {
+        "title": "Dokumentation",
+        "description": "Durchsuchen Sie API-Dokumentation und Integrationsleitfäden. Dies ist eine Platzhalterseite.",
+        "gettingStarted": {
+          "title": "Erste Schritte",
+          "description": "Schnellstartanleitung zur Integration mit unserer Plattform.",
+          "readMore": "Mehr lesen →"
+        },
+        "apiReference": {
+          "title": "API-Referenz",
+          "description": "Vollständige Referenz für alle API-Endpunkte und -Methoden.",
+          "readMore": "Mehr lesen →"
+        },
+        "sdksLibraries": {
+          "title": "SDKs & Bibliotheken",
+          "description": "Offizielle SDKs für beliebte Programmiersprachen.",
+          "readMore": "Mehr lesen →"
+        },
+        "tutorials": {
+          "title": "Tutorials",
+          "description": "Schritt-für-Schritt-Tutorials und Anwendungsbeispiele.",
+          "readMore": "Mehr lesen →"
+        }
+      },
+      "marketingToolkit": {
+        "title": "Marketing-Toolkit",
+        "description": "Zugriff auf Marketingmaterialien, Markenressourcen und Werbewerkzeuge. Dies ist eine Platzhalterseite.",
+        "brandAssets": {
+          "title": "Markenressourcen",
+          "description": "Laden Sie Logos, Markenrichtlinien und visuelle Assets herunter.",
+          "downloadLogos": "Logos herunterladen",
+          "viewGuidelines": "Richtlinien anzeigen"
+        },
+        "socialMediaTemplates": {
+          "title": "Social-Media-Vorlagen",
+          "description": "Vorgefertigte Vorlagen für Social-Media-Beiträge und Kampagnen.",
+          "browseTemplates": "Vorlagen durchsuchen"
+        },
+        "emailTemplates": {
+          "title": "E-Mail-Vorlagen",
+          "description": "Anpassbare E-Mail-Vorlagen für Marketingkampagnen.",
+          "viewTemplates": "Vorlagen anzeigen"
+        }
+      }
     }
   },
   "sdks": {
