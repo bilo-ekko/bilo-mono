@@ -1,0 +1,20 @@
+---
+description: TypeScript conventions (types, error handling, exports) for backend + frontend packages.
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TypeScript conventions
+
+## Types
+- Prefer explicit public types for exported APIs.
+- Avoid `any`. If unavoidable, isolate it behind a boundary and document why.
+- Prefer discriminated unions for state machines and API results.
+
+## Error handling
+- Prefer typed results for expected failures (validation, not-found).
+- Throw exceptions for truly exceptional cases (misconfiguration, invariants).
+
+## Module boundaries
+- Default to **named exports** for libraries; avoid default exports except framework conventions.
+- Keep “barrel files” (`index.ts`) small and stable.

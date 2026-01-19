@@ -163,6 +163,29 @@ moon run web-dashboard:dev    # Runs on http://localhost:4000
 moon run web-sdks:dev          # Runs on http://localhost:4001
 ```
 
+### Docker Deployment
+
+Run all services in Docker containers:
+
+```bash
+# Option 1: Using helper scripts
+./scripts/docker-build.sh    # Build all images
+./scripts/docker-run.sh       # Run all containers
+
+# Option 2: Using Docker Compose (recommended)
+docker-compose up --build     # Build and run all services
+docker-compose up -d          # Run in background
+docker-compose down           # Stop all services
+```
+
+**Service URLs:**
+- Go API: http://localhost:8080
+- NestJS API: http://localhost:3000
+- Next.js Dashboard: http://localhost:4000
+- SvelteKit SDKs: http://localhost:4001
+
+See [DOCKER.md](./DOCKER.md) for complete Docker documentation.
+
 ### Stopping All Processes
 
 If you need to kill all running development servers (even if terminals were closed):

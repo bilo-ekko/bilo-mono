@@ -1,0 +1,22 @@
+---
+description: Next.js conventions (App Router, server/client boundaries, data fetching, route design).
+globs: **/{app,src/app}/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Next.js conventions
+
+## App Router boundaries
+- Be explicit with `'use client'`; keep client components minimal.
+- Server Components should do data fetching and pass serialized props down.
+
+## Data fetching
+- Prefer server-side fetching for privileged data.
+- Use caching/revalidation intentionally (don’t cargo-cult).
+
+## UI & components
+- Favor composable components and small files.
+- Avoid pushing business logic into components—extract to hooks/services.
+
+## Performance
+- Avoid unnecessary client-side state; prefer URL state where appropriate.

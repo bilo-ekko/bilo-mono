@@ -1,0 +1,40 @@
+---
+description: Global engineering standards for this monorepo (Moon, TS/Go, Next.js, SvelteKit).
+globs:
+alwaysApply: true
+---
+
+# Core engineering rules (always on)
+
+## Operating principles
+- Prefer **small, reviewable changes** over big-bang refactors.
+- If requirements are unclear, propose **2–3 options** and pick the safest default.
+- Avoid introducing new dependencies unless clearly justified.
+
+## Monorepo & Moon
+- Treat the repo as a **workspace**: don’t hardcode relative paths that break when packages move.
+- Prefer using existing Moon tasks/scripts over inventing new ad-hoc commands.
+- When adding new packages:
+  - keep boundaries clean (no circular deps),
+  - keep public APIs small,
+  - document how to run/test/build.
+
+## Code quality baseline
+- **No silent failures**: return explicit errors, log with context, and bubble up.
+- Keep functions small and pure where possible; isolate IO at edges.
+- Add/update tests when fixing bugs or adding behavior.
+- Update docs (README/ADRs) when you change developer workflows.
+
+## Formatting & style
+- TypeScript: readable types; avoid `any`; prefer `unknown` + narrowing.
+- Go: standard `go fmt`; keep package names idiomatic; errors should include context (`fmt.Errorf("...: %w", err)`).
+
+## Security & secrets
+- Never commit secrets. Prefer env vars and documented local setup.
+- Any integration tokens (Linear/ReadMe/etc.) must be provided via environment variables.
+
+## “Definition of done” for a change
+- Builds and tests pass (or explain what can’t be run and why).
+- Lint/format applied.
+- Clear PR description + rationale.
+- Any new env vars documented.

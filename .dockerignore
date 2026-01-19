@@ -1,0 +1,81 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Documentation
+*.md
+!README.md
+DOCS.md
+DOCKER.md
+REQUIREMENTS.md
+
+# IDE & Editors
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+.cursor
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+.pnpm-store
+.npm
+.yarn
+
+# Build outputs (exclude from context, built inside container)
+dist
+build
+.next
+.svelte-kit
+*.log
+
+# Testing
+coverage
+.nyc_output
+test-results
+tests/e2e/playwright/test-results
+tests/e2e/cypress/videos
+tests/e2e/cypress/screenshots
+
+# Go
+*.exe
+*.test
+*.prof
+vendor
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Misc
+.cache
+tmp
+temp
+*.tmp
+
+# Scripts (we don't need these in containers)
+scripts/*.sh
+scripts/*.ps1
+scripts/*.md
+
+# Docker files themselves
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.circleci
+
+# Package manager lock files (keep only pnpm-lock.yaml for consistency)
+package-lock.json
+yarn.lock

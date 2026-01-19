@@ -1,0 +1,79 @@
+# version: '3.8'
+
+services:
+  # Backend Services
+  api-golang:
+    build:
+      context: .
+      dockerfile: apps/backend/api-golang/Dockerfile
+    container_name: bilo-api-golang
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - GO_ENV=production
+    restart: unless-stopped
+    networks:
+      - bilo-network
+
+  api-nestjs:
+    build:
+      context: .
+      dockerfile: apps/backend/api-nestjs/Dockerfile
+    container_name: bilo-api-nestjs
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    restart: unless-stopped
+    networks:
+      - bilo-network
+
+  # Frontend Services
+  web-dashboard:
+    build:
+      context: .
+      dockerfile: apps/frontend/web-dashboard/Dockerfile
+    container_name: bilo-web-dashboard
+    ports:
+      - "4000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_GOLANG_URL=http://api-golang:8080
+      - NEXT_PUBLIC_API_NESTJS_URL=http://api-nestjs:3000
+    restart: unless-stopped
+    depends_on:
+      - api-golang
+      - api-nestjs
+    networks:
+      - bilo-network
+
+  web-sdks-apps:
+    build:
+      context: .
+      dockerfile: apps/frontend/web-sdks-apps/Dockerfile
+    container_name: bilo-web-sdks-apps
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - NODE_ENV=production
+      - PUBLIC_API_GOLANG_URL=http://api-golang:8080
+      - PUBLIC_API_NESTJS_URL=http://api-nestjs:3000
+    restart: unless-stopped
+    depends_on:
+      - api-golang
+      - api-nestjs
+    networks:
+      - bilo-network
+
+networks:
+  bilo-network:
+    driver: bridge
+
+# Volumes for persistent data (if needed in the future)
+# volumes:
+#   postgres-data:
+#   redis-data:

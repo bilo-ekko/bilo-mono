@@ -1,0 +1,65 @@
+# version: '3.8'
+
+# Development override for docker-compose
+# Use: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  api-golang:
+    build:
+      context: .
+      dockerfile: apps/backend/api-golang/Dockerfile
+      target: build  # Stop at build stage for faster iteration
+    command: moon run api-golang:dev
+    volumes:
+      - ./apps/backend/api-golang:/app/apps/backend/api-golang
+      - ./packages:/app/packages
+    environment:
+      - GO_ENV=development
+    ports:
+      - "8080:8080"
+
+  api-nestjs:
+    build:
+      context: .
+      dockerfile: apps/backend/api-nestjs/Dockerfile
+      target: build
+    command: moon run api-nestjs:dev
+    volumes:
+      - ./apps/backend/api-nestjs:/app/apps/backend/api-nestjs
+      - ./packages:/app/packages
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+
+  web-dashboard:
+    build:
+      context: .
+      dockerfile: apps/frontend/web-dashboard/Dockerfile
+      target: build
+    command: moon run web-dashboard:dev
+    volumes:
+      - ./apps/frontend/web-dashboard:/app/apps/frontend/web-dashboard
+      - ./packages:/app/packages
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_GOLANG_URL=http://localhost:8080
+      - NEXT_PUBLIC_API_NESTJS_URL=http://localhost:3000
+    ports:
+      - "4000:3000"
+
+  web-sdks-apps:
+    build:
+      context: .
+      dockerfile: apps/frontend/web-sdks-apps/Dockerfile
+      target: build
+    command: moon run web-sdks-apps:dev
+    volumes:
+      - ./apps/frontend/web-sdks-apps:/app/apps/frontend/web-sdks-apps
+      - ./packages:/app/packages
+    environment:
+      - NODE_ENV=development
+      - PUBLIC_API_GOLANG_URL=http://localhost:8080
+      - PUBLIC_API_NESTJS_URL=http://localhost:3000
+    ports:
+      - "4001:4001"

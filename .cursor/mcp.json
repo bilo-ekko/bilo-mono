@@ -1,0 +1,17 @@
+{
+    "mcpServers": {
+      "figma": {
+        "url": "https://mcp.figma.com/mcp"
+      },
+      "readme": {
+        "url": "https://docs.readme.com/mcp",
+        "headers": {
+          "authorization": "Bearer ${README_API_KEY}"
+        },
+        "env": {
+          "README_API_KEY": ""
+        }
+      }
+    }
+  }
+  

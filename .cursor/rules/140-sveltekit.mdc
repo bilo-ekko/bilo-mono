@@ -1,0 +1,17 @@
+---
+description: SvelteKit conventions (load functions, server routes, form actions, module boundaries).
+globs: **/{src}/routes/**/*.{ts,svelte}
+alwaysApply: false
+---
+
+# SvelteKit conventions
+
+## Routing & data
+- Prefer `+page.server.ts` / `+layout.server.ts` for privileged data.
+- Keep `load` functions focused; move heavy logic into `/src/lib/server` modules.
+
+## Form actions
+- Prefer form actions for mutations; validate input and return typed failure states.
+
+## Components
+- Keep components presentational; push domain logic into `/src/lib`.

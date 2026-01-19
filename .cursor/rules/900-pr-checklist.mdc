@@ -1,0 +1,14 @@
+---
+description: PR checklist: what to verify before marking work complete (tests, docs, rollout).
+globs:
+alwaysApply: false
+---
+
+# PR checklist
+
+- [ ] Code builds locally (or in CI) for affected packages
+- [ ] Tests added/updated and passing
+- [ ] Lint/format applied
+- [ ] No secrets committed; env vars documented
+- [ ] User-facing changes have release notes / docs updates
+- [ ] Any migrations/rollout steps documented

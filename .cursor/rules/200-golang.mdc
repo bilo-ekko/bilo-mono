@@ -1,0 +1,23 @@
+---
+description: Go conventions (project layout, errors, context, tests, interfaces).
+globs: **/*.go
+alwaysApply: false
+---
+
+# Go conventions
+
+## Errors
+- Wrap errors with context using `%w`.
+- Don’t log and return the same error unless there’s a clear boundary reason.
+
+## Context
+- Pass `context.Context` as the first param for request-scoped work.
+- Never store contexts on structs.
+
+## Interfaces
+- Prefer small interfaces at boundaries (consumer-defined interfaces).
+- Avoid “interface{} as a design”.
+
+## Testing
+- Table-driven tests where useful.
+- Prefer deterministic tests; avoid time-based flakiness.
