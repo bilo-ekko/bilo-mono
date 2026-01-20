@@ -20,6 +20,38 @@ jobs:
       - name: Setup toolchain (Moon + tools)
         uses: moonrepo/setup-toolchain@v0
 
+      - name: Setup Moon toolchains
+        run: moon setup
+
+      - name: Setup PATH for Moon tools
+        shell: bash
+        run: |
+          # Add proto's bin to PATH (Moon uses proto to manage tools)
+          # This persists across steps using GITHUB_PATH
+          echo "$HOME/.proto/bin" >> $GITHUB_PATH
+          
+          # Add Node.js to PATH if installed by proto
+          if [ -d "$HOME/.proto/tools/node/22.20.0/bin" ]; then
+            echo "$HOME/.proto/tools/node/22.20.0/bin" >> $GITHUB_PATH
+          fi
+          
+          # Verify tools are available
+          export PATH="$HOME/.proto/bin:$PATH"
+          if [ -d "$HOME/.proto/tools/node/22.20.0/bin" ]; then
+            export PATH="$HOME/.proto/tools/node/22.20.0/bin:$PATH"
+          fi
+          
+          echo "Node.js version: $(node --version || echo 'not found')"
+          
+          # Verify pnpm is available, install if not
+          if ! command -v pnpm &> /dev/null; then
+            echo "pnpm not found, installing via npm..."
+            npm install -g pnpm@10.18.0
+            echo "$(npm config get prefix)/bin" >> $GITHUB_PATH
+          fi
+          echo "pnpm version: $(pnpm --version)"
+          echo "pnpm location: $(which pnpm)"
+
       - name: Install dependencies
         run: moon run :install
 
