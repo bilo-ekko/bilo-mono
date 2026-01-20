@@ -1,5 +1,5 @@
 # moon:
-#   version: '2.0.0-beta.0'
+#   version: '2.0.0-beta.0'  # Cannot specify moon version here - use proto install in CI instead
 
 proto:
   version: '0.54.1'
