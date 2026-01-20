@@ -10,7 +10,7 @@ import (
 	"api-golang/internal/funds/salestax"
 	carbonfootprint "api-golang/internal/impact/carbon_footprint"
 	"api-golang/internal/impact/fee"
-	"api-golang/internal/impact_partner"
+	"api-golang/internal/impact_partner/impact_partner"
 	"api-golang/internal/organisation/customer"
 	"api-golang/internal/organisation/organisation"
 	"api-golang/internal/platform/country"

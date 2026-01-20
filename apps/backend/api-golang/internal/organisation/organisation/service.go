@@ -5,16 +5,20 @@ import (
 	"fmt"
 
 	"api-golang/internal/shared/errors"
+
+	"github.com/bilo-mono/packages/common/service"
 )
 
 // DefaultService implements the Service interface
 type DefaultService struct {
-	repo Repository
+	service.BaseService[Repository]
 }
 
 // NewService creates a new organisation service
 func NewService(repo Repository) *DefaultService {
-	return &DefaultService{repo: repo}
+	return &DefaultService{
+		BaseService: service.NewBaseService(repo),
+	}
 }
 
 // ValidateOrganisation validates organisation access based on header and body org IDs
@@ -28,7 +32,7 @@ func (s *DefaultService) ValidateOrganisation(ctx context.Context, headerOrgID, 
 	}
 
 	// Check if body org is a child of header org
-	bodyOrg, err := s.repo.GetByID(ctx, bodyOrgID)
+	bodyOrg, err := s.Repo.GetByID(ctx, bodyOrgID)
 	if err != nil {
 		return nil, fmt.Errorf("validating organisation: %w", err)
 	}
@@ -43,7 +47,7 @@ func (s *DefaultService) ValidateOrganisation(ctx context.Context, headerOrgID, 
 
 // GetOrganisation retrieves an organisation by ID
 func (s *DefaultService) GetOrganisation(ctx context.Context, id string) (*Entity, error) {
-	org, err := s.repo.GetByID(ctx, id)
+	org, err := s.Repo.GetByID(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("getting organisation: %w", err)
 	}

@@ -4,23 +4,27 @@ import (
 	"context"
 	"fmt"
 	"math"
+
+	"github.com/bilo-mono/packages/common/service"
 )
 
 // DefaultService implements the Service interface
 type DefaultService struct {
-	repo Repository
+	service.BaseService[Repository]
 }
 
 // NewService creates a new sales tax service
 func NewService(repo Repository) *DefaultService {
-	return &DefaultService{repo: repo}
+	return &DefaultService{
+		BaseService: service.NewBaseService(repo),
+	}
 }
 
 // CalculateSalesTax calculates sales tax based on merchant and customer locations
 // Tax jurisdiction is typically based on the customer's location for digital services
 func (s *DefaultService) CalculateSalesTax(ctx context.Context, input TaxCalculationInput) (*TaxResult, error) {
 	// For B2C digital services, use customer location for tax calculation
-	taxRate, err := s.repo.GetTaxRate(ctx, input.CustomerCountry, input.CustomerState, input.CustomerPostalCode)
+	taxRate, err := s.Repo.GetTaxRate(ctx, input.CustomerCountry, input.CustomerState, input.CustomerPostalCode)
 	if err != nil {
 		return nil, fmt.Errorf("getting tax rate: %w", err)
 	}

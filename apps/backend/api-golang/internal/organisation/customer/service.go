@@ -7,24 +7,28 @@ import (
 
 	"api-golang/internal/shared/errors"
 
+	"github.com/bilo-mono/packages/common/service"
+
 	"github.com/google/uuid"
 )
 
 // DefaultService implements the Service interface
 type DefaultService struct {
-	repo Repository
+	service.BaseService[Repository]
 }
 
 // NewService creates a new customer service
 func NewService(repo Repository) *DefaultService {
-	return &DefaultService{repo: repo}
+	return &DefaultService{
+		BaseService: service.NewBaseService(repo),
+	}
 }
 
 // GetOrCreateCustomer finds an existing customer or creates a new one
 func (s *DefaultService) GetOrCreateCustomer(ctx context.Context, input CreateCustomerInput) (*Entity, error) {
 	// Try to find existing customer by reference
 	if input.Reference != "" {
-		existing, err := s.repo.GetByReference(ctx, input.OrganisationID, input.Reference)
+		existing, err := s.Repo.GetByReference(ctx, input.OrganisationID, input.Reference)
 		if err == nil {
 			return existing, nil
 		}
@@ -51,7 +55,7 @@ func (s *DefaultService) GetOrCreateCustomer(ctx context.Context, input CreateCu
 		UpdatedAt:      now,
 	}
 
-	if err := s.repo.Create(ctx, customer); err != nil {
+	if err := s.Repo.Create(ctx, customer); err != nil {
 		return nil, fmt.Errorf("creating customer: %w", err)
 	}
 

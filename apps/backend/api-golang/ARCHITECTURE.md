@@ -6,12 +6,15 @@ This document describes the architectural patterns and design decisions used in 
 
 The quote creation system implements several architectural patterns working together:
 
-> Resources
+> References
 > - [DDD with VSA](https://medium.com/@evgeni.n.rusev/net-domain-driven-design-template-with-a-vertical-slice-architecture-33812c22b509)
-> - []()
 
 ### 1. **Vertical Slice Architecture**
-The codebase is organized by **feature/domain** rather than by technical layers. Each domain (quote, organisation, impact, finance, etc.) contains all its layers (entity, repository, service, controller) within a single directory. This approach:
+The codebase is organized by **feature/domain** rather than by technical layers. 
+
+Each domain (quote, organisation, impact, finance, etc.) contains all its layers (entity, repository, service, controller) within a single directory. 
+
+This approach:
 - Keeps related code together
 - Makes features easier to understand and modify
 - Reduces coupling between unrelated features

@@ -1,34 +1,36 @@
 package impact_project
 
+import "github.com/bilo-mono/packages/common/service"
+
 // Service handles business logic for impact projects
 type Service struct {
-	repo *Repository
+	service.BaseService[*Repository]
 }
 
 // NewService creates a new service
 func NewService(repo *Repository) *Service {
 	return &Service{
-		repo: repo,
+		BaseService: service.NewBaseService(repo),
 	}
 }
 
 // GetAllProjects returns all impact projects
 func (s *Service) GetAllProjects() []*Entity {
-	return s.repo.GetAll()
+	return s.Repo.GetAll()
 }
 
 // GetProjectByID returns a specific project by ID
 func (s *Service) GetProjectByID(id string) (*Entity, error) {
-	return s.repo.GetByID(id)
+	return s.Repo.GetByID(id)
 }
 
 // GetProjectsByPartnerID returns all projects for a specific partner
 func (s *Service) GetProjectsByPartnerID(partnerID string) []*Entity {
-	return s.repo.GetByPartnerID(partnerID)
+	return s.Repo.GetByPartnerID(partnerID)
 }
 
 // CreateProject creates a new impact project
 func (s *Service) CreateProject(project *Entity) error {
 	// Add business logic/validation here if needed
-	return s.repo.Create(project)
+	return s.Repo.Create(project)
 }

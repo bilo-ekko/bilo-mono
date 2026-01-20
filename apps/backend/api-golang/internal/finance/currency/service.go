@@ -3,18 +3,22 @@ package currency
 import (
 	"context"
 	"fmt"
+
+	"github.com/bilo-mono/packages/common/service"
 )
 
 const baseCurrency = "EUR"
 
 // DefaultService implements the Service interface
 type DefaultService struct {
-	repo Repository
+	service.BaseService[Repository]
 }
 
 // NewService creates a new currency service
 func NewService(repo Repository) *DefaultService {
-	return &DefaultService{repo: repo}
+	return &DefaultService{
+		BaseService: service.NewBaseService(repo),
+	}
 }
 
 // ConvertToEUR converts an amount from the given currency to EUR
@@ -30,7 +34,7 @@ func (s *DefaultService) ConvertToEUR(ctx context.Context, amount float64, fromC
 		}, nil
 	}
 
-	rate, err := s.repo.GetExchangeRate(ctx, fromCurrency, baseCurrency)
+	rate, err := s.Repo.GetExchangeRate(ctx, fromCurrency, baseCurrency)
 	if err != nil {
 		return nil, fmt.Errorf("getting exchange rate from %s to %s: %w", fromCurrency, baseCurrency, err)
 	}
@@ -59,7 +63,7 @@ func (s *DefaultService) ConvertFromEUR(ctx context.Context, amount float64, toC
 		}, nil
 	}
 
-	rate, err := s.repo.GetExchangeRate(ctx, baseCurrency, toCurrency)
+	rate, err := s.Repo.GetExchangeRate(ctx, baseCurrency, toCurrency)
 	if err != nil {
 		return nil, fmt.Errorf("getting exchange rate from %s to %s: %w", baseCurrency, toCurrency, err)
 	}

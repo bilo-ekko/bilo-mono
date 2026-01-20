@@ -4,21 +4,25 @@ import (
 	"context"
 	"fmt"
 	"math"
+
+	"github.com/bilo-mono/packages/common/service"
 )
 
 // DefaultService implements the Service interface
 type DefaultService struct {
-	repo Repository
+	service.BaseService[Repository]
 }
 
 // NewService creates a new fee service
 func NewService(repo Repository) *DefaultService {
-	return &DefaultService{repo: repo}
+	return &DefaultService{
+		BaseService: service.NewBaseService(repo),
+	}
 }
 
 // CalculateServiceFee calculates the service fee for a compensation amount
 func (s *DefaultService) CalculateServiceFee(ctx context.Context, organisationID string, compensationAmount float64) (*FeeResult, error) {
-	config, err := s.repo.GetFeeConfig(ctx, organisationID)
+	config, err := s.Repo.GetFeeConfig(ctx, organisationID)
 	if err != nil {
 		return nil, fmt.Errorf("getting fee config: %w", err)
 	}

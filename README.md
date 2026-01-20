@@ -21,6 +21,7 @@ bilo-mono/
 └── packages/                   # Shared packages (future)
 ```
 
+> For full golang software architecture, please review [ARCHITECTURE.md](./apps/backend/api-golang/ARCHITECTURE.md)
 ---
 
 ## 🧰 Toolchains

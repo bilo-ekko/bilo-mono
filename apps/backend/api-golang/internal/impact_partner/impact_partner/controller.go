@@ -1,7 +1,6 @@
 package impact_partner
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"strings"
