@@ -20,6 +20,40 @@ jobs:
       - name: Setup toolchain (Moon + tools)
         uses: moonrepo/setup-toolchain@v0
 
+      - name: Verify and install correct Moon version
+        shell: bash
+        run: |
+          # Ensure proto is in PATH (setup-toolchain should install it)
+          export PATH="$HOME/.proto/bin:$PATH"
+          
+          # Verify proto is available
+          if ! command -v proto &> /dev/null; then
+            echo "❌ proto not found. setup-toolchain should have installed it."
+            exit 1
+          fi
+          
+          EXPECTED_VERSION="2.0.0-beta.0"
+          echo "Expected Moon version: $EXPECTED_VERSION"
+          
+          # Install Moon using proto (this respects toolchains.yml but we're being explicit)
+          echo "Installing Moon $EXPECTED_VERSION via proto..."
+          proto install moon "$EXPECTED_VERSION" --pin
+          
+          # Ensure proto's bin is in PATH for subsequent steps
+          export PATH="$HOME/.proto/bin:$PATH"
+          echo "$HOME/.proto/bin" >> $GITHUB_PATH
+          
+          # Verify the installed version
+          MOON_VERSION=$(moon --version 2>/dev/null | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+(-beta\.[0-9]+)?' || echo "")
+          echo "Installed Moon version: ${MOON_VERSION:-not found}"
+          
+          if [ "$MOON_VERSION" != "$EXPECTED_VERSION" ]; then
+            echo "❌ Moon version mismatch. Expected: $EXPECTED_VERSION, Got: $MOON_VERSION"
+            exit 1
+          fi
+          
+          echo "✅ Moon $EXPECTED_VERSION is correctly installed"
+
       - name: Setup Moon toolchains
         run: moon setup
 

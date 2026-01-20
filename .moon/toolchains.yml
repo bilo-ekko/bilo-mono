@@ -1,8 +1,5 @@
 # moon:
-  # Defines an HTTPS URL in which to fetch the current version information from.
-  # manifestUrl: 'https://proxy.corp.net/moon/version'
-  # Defines an HTTPS URL in which the moon binary can be downloaded from. The download file name is hard-coded and will be appended to the provided URL.
-  # downloadUrl: 'https://github.com/moonrepo/moon/releases/latest/download'
+#   version: '2.0.0-beta.0'
 
 proto:
   version: '0.54.1'
