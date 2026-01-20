@@ -5,15 +5,15 @@ import (
 	"sync"
 )
 
-// Repository handles data access for ImpactPartners
-type Repository struct {
+// InMemoryRepository implements Repository interface with in-memory storage
+type InMemoryRepository struct {
 	partners map[string]*Entity
 	mu       sync.RWMutex
 }
 
 // NewRepository creates a new repository with sample data
-func NewRepository() *Repository {
-	repo := &Repository{
+func NewRepository() *InMemoryRepository {
+	repo := &InMemoryRepository{
 		partners: make(map[string]*Entity),
 	}
 
@@ -59,7 +59,7 @@ func NewRepository() *Repository {
 }
 
 // GetAll returns all impact partners
-func (r *Repository) GetAll() []*Entity {
+func (r *InMemoryRepository) GetAll() []*Entity {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -71,7 +71,7 @@ func (r *Repository) GetAll() []*Entity {
 }
 
 // GetByID returns a specific impact partner by ID
-func (r *Repository) GetByID(id string) (*Entity, error) {
+func (r *InMemoryRepository) GetByID(id string) (*Entity, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -83,7 +83,7 @@ func (r *Repository) GetByID(id string) (*Entity, error) {
 }
 
 // Create adds a new impact partner
-func (r *Repository) Create(partner *Entity) error {
+func (r *InMemoryRepository) Create(partner *Entity) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

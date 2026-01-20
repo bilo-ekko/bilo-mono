@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"api-golang/internal/finance/currency"
+	"api-golang/internal/funds/salestax"
 	carbonfootprint "api-golang/internal/impact/carbon_footprint"
 	"api-golang/internal/impact/fee"
 	"api-golang/internal/impact_partner"
-	"api-golang/internal/finance/currency"
-	"api-golang/internal/funds/salestax"
 	"api-golang/internal/organisation/customer"
 	"api-golang/internal/organisation/organisation"
 	"api-golang/internal/platform/country"
@@ -52,16 +52,16 @@ func setupOrchestrator() *Orchestrator {
 	quoteRepo := NewInMemoryRepository()
 
 	return NewOrchestrator(OrchestratorDeps{
-		OrganisationService: orgService,
-		CustomerService:     customerService,
-		CountryService:      countryService,
-		CurrencyService:     currencyService,
-		CarbonService:       carbonService,
-		FeeService:          feeService,
-		BlendedPriceCalc:    blendedPriceCalc,
-		ImpactPartnerRepo:   partnerRepo,
-		SalesTaxService:     salesTaxService,
-		QuoteRepo:           quoteRepo,
+		OrganisationService:  orgService,
+		CustomerService:      customerService,
+		CountryService:       countryService,
+		CurrencyService:      currencyService,
+		CarbonService:        carbonService,
+		FeeService:           feeService,
+		BlendedPriceCalc:     blendedPriceCalc,
+		ImpactPartnerService: partnerService,
+		SalesTaxService:      salesTaxService,
+		QuoteRepo:            quoteRepo,
 	})
 }
 

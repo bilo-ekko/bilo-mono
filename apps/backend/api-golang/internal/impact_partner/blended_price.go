@@ -1,6 +1,7 @@
 package impact_partner
 
 import (
+	"context"
 	"api-golang/internal/shared/types"
 )
 
@@ -16,21 +17,24 @@ type ProjectWithPrice struct {
 
 // BlendedPriceCalculator calculates blended prices across projects
 type BlendedPriceCalculator struct {
-	partnerService *Service
+	partnerService Service
 }
 
 // NewBlendedPriceCalculator creates a new calculator
-func NewBlendedPriceCalculator(partnerService *Service) *BlendedPriceCalculator {
+func NewBlendedPriceCalculator(partnerService Service) *BlendedPriceCalculator {
 	return &BlendedPriceCalculator{
 		partnerService: partnerService,
 	}
 }
 
 // CalculateBlendedPrice calculates the blended unit price across all projects for an organisation
-func (c *BlendedPriceCalculator) CalculateBlendedPrice(organisationID string, filterByLocation bool, locationCountry string) (*types.BlendedPriceResult, error) {
+func (c *BlendedPriceCalculator) CalculateBlendedPrice(ctx context.Context, organisationID string, filterByLocation bool, locationCountry string) (*types.BlendedPriceResult, error) {
 	// Get all partners for the organisation
 	// In a real implementation, this would filter by organisation
-	partners := c.partnerService.GetAllPartners()
+	partners, err := c.partnerService.GetAllPartners(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	// Sample project prices (in real implementation, these would come from a projects repository)
 	projectPrices := map[string][]ProjectWithPrice{

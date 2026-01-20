@@ -1,6 +1,7 @@
 package impact_partner
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"strings"
@@ -8,11 +9,11 @@ import (
 
 // Controller handles HTTP requests for impact partners
 type Controller struct {
-	service *Service
+	service Service
 }
 
 // NewController creates a new controller
-func NewController(service *Service) *Controller {
+func NewController(service Service) *Controller {
 	return &Controller{
 		service: service,
 	}
@@ -25,7 +26,12 @@ func (c *Controller) HandleGetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	partners := c.service.GetAllPartners()
+	ctx := r.Context()
+	partners, err := c.service.GetAllPartners(ctx)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(partners)
 }
@@ -46,7 +52,8 @@ func (c *Controller) HandleGetByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	partner, err := c.service.GetPartnerByID(id)
+	ctx := r.Context()
+	partner, err := c.service.GetPartnerByID(ctx, id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return

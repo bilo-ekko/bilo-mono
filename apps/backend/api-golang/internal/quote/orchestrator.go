@@ -57,8 +57,8 @@ type Orchestrator struct {
 	feeService    fee.Service
 
 	// Impact Partner domain
-	blendedPriceCalc  *impact_partner.BlendedPriceCalculator
-	impactPartnerRepo *impact_partner.Repository
+	blendedPriceCalc     *impact_partner.BlendedPriceCalculator
+	impactPartnerService impact_partner.Service
 
 	// Funds domain
 	salesTaxService salestax.Service
@@ -69,31 +69,31 @@ type Orchestrator struct {
 
 // OrchestratorDeps contains all dependencies for the orchestrator
 type OrchestratorDeps struct {
-	OrganisationService organisation.Service
-	CustomerService     customer.Service
-	CountryService      country.Service
-	CurrencyService     currency.Service
-	CarbonService       carbonfootprint.Service
-	FeeService          fee.Service
-	BlendedPriceCalc    *impact_partner.BlendedPriceCalculator
-	ImpactPartnerRepo   *impact_partner.Repository
-	SalesTaxService     salestax.Service
-	QuoteRepo           Repository
+	OrganisationService  organisation.Service
+	CustomerService      customer.Service
+	CountryService       country.Service
+	CurrencyService      currency.Service
+	CarbonService        carbonfootprint.Service
+	FeeService           fee.Service
+	BlendedPriceCalc     *impact_partner.BlendedPriceCalculator
+	ImpactPartnerService impact_partner.Service
+	SalesTaxService      salestax.Service
+	QuoteRepo            Repository
 }
 
 // NewOrchestrator creates a new quote orchestrator
 func NewOrchestrator(deps OrchestratorDeps) *Orchestrator {
 	return &Orchestrator{
-		organisationService: deps.OrganisationService,
-		customerService:     deps.CustomerService,
-		countryService:      deps.CountryService,
-		currencyService:     deps.CurrencyService,
-		carbonService:       deps.CarbonService,
-		feeService:          deps.FeeService,
-		blendedPriceCalc:    deps.BlendedPriceCalc,
-		impactPartnerRepo:   deps.ImpactPartnerRepo,
-		salesTaxService:     deps.SalesTaxService,
-		quoteRepo:           deps.QuoteRepo,
+		organisationService:  deps.OrganisationService,
+		customerService:      deps.CustomerService,
+		countryService:       deps.CountryService,
+		currencyService:      deps.CurrencyService,
+		carbonService:        deps.CarbonService,
+		feeService:           deps.FeeService,
+		blendedPriceCalc:     deps.BlendedPriceCalc,
+		impactPartnerService: deps.ImpactPartnerService,
+		salesTaxService:      deps.SalesTaxService,
+		quoteRepo:            deps.QuoteRepo,
 	}
 }
 
@@ -210,6 +210,7 @@ func (o *Orchestrator) CreateQuote(ctx context.Context, req *CreateQuoteRequest,
 	}
 
 	blendedPrice, err := o.blendedPriceCalc.CalculateBlendedPrice(
+		ctx,
 		org.OrganisationID,
 		filterByLocation,
 		locationFilter,
@@ -350,7 +351,7 @@ func (o *Orchestrator) CreateQuote(ctx context.Context, req *CreateQuoteRequest,
 			}
 			// Add partner details if requested
 			if req.IncludeImpactPartnerDetails {
-				partnerEntity, err := o.impactPartnerRepo.GetByID(project.PartnerID)
+				partnerEntity, err := o.impactPartnerService.GetPartnerByID(ctx, project.PartnerID)
 				if err == nil {
 					partner.Name = &partnerEntity.Name
 					if partnerEntity.ShortDescription != nil {

@@ -93,16 +93,16 @@ func main() {
 	// Quote domain - Orchestrator
 	quoteRepo := quote.NewInMemoryRepository()
 	quoteOrchestrator := quote.NewOrchestrator(quote.OrchestratorDeps{
-		OrganisationService: orgService,
-		CustomerService:     customerService,
-		CountryService:      countryService,
-		CurrencyService:     currencyService,
-		CarbonService:       carbonService,
-		FeeService:          feeService,
-		BlendedPriceCalc:    blendedPriceCalc,
-		ImpactPartnerRepo:   partnerRepo,
-		SalesTaxService:     salesTaxService,
-		QuoteRepo:           quoteRepo,
+		OrganisationService:  orgService,
+		CustomerService:      customerService,
+		CountryService:       countryService,
+		CurrencyService:      currencyService,
+		CarbonService:        carbonService,
+		FeeService:           feeService,
+		BlendedPriceCalc:     blendedPriceCalc,
+		ImpactPartnerService: partnerService,
+		SalesTaxService:      salesTaxService,
+		QuoteRepo:            quoteRepo,
 	})
 	quoteController := quote.NewController(quoteOrchestrator)
 
