@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Moon
+        uses: moonrepo/setup-action@v2
+        with:
+          version: 'latest'
+
+      - name: Setup Moon toolchains
+        run: moon setup
+
+      - name: Install dependencies
+        run: moon run :install
+
+      - name: Start development servers
+        run: |
+          # Start servers in background
+          echo "Starting NestJS API on port 3000..."
+          moon run api-nestjs:dev > /tmp/nestjs.log 2>&1 &
+          NESTJS_PID=$!
+          
+          echo "Starting Go API on port 8080..."
+          moon run api-golang:dev > /tmp/golang.log 2>&1 &
+          GOLANG_PID=$!
+          
+          # Wait for servers to be ready
+          echo "Waiting for servers to start..."
+          timeout=60
+          elapsed=0
+          while [ $elapsed -lt $timeout ]; do
+            nestjs_ready=false
+            golang_ready=false
+            
+            if curl -s http://localhost:3000/ > /dev/null 2>&1; then
+              nestjs_ready=true
+            fi
+            
+            if curl -s http://localhost:8080/ > /dev/null 2>&1; then
+              golang_ready=true
+            fi
+            
+            if [ "$nestjs_ready" = true ] && [ "$golang_ready" = true ]; then
+              echo "✅ All servers are ready"
+              break
+            fi
+            
+            sleep 2
+            elapsed=$((elapsed + 2))
+            echo "Waiting... ($elapsed/$timeout seconds) - NestJS: $nestjs_ready, Go: $golang_ready"
+          done
+          
+          if [ $elapsed -ge $timeout ]; then
+            echo "❌ Servers failed to start within timeout"
+            echo "NestJS logs:"
+            cat /tmp/nestjs.log || true
+            echo "Go API logs:"
+            cat /tmp/golang.log || true
+            exit 1
+          fi
+          
+          # Store PIDs for cleanup
+          echo "NESTJS_PID=$NESTJS_PID" >> $GITHUB_ENV
+          echo "GOLANG_PID=$GOLANG_PID" >> $GITHUB_ENV
+
+      - name: Run tests
+        run: moon run :test
+
+      - name: Cleanup
+        if: always()
+        run: |
+          echo "Cleaning up background processes..."
+          # Kill specific processes if PIDs are set
+          if [ -n "$NESTJS_PID" ]; then
+            kill $NESTJS_PID 2>/dev/null || true
+          fi
+          if [ -n "$GOLANG_PID" ]; then
+            kill $GOLANG_PID 2>/dev/null || true
+          fi
+          # Fallback: kill by process name
+          pkill -f "moon run" || true
+          pkill -f "nest start" || true
+          pkill -f "go run" || true
+          # Show logs if available
+          if [ -f /tmp/nestjs.log ]; then
+            echo "NestJS logs:"
+            tail -50 /tmp/nestjs.log || true
+          fi
+          if [ -f /tmp/golang.log ]; then
+            echo "Go API logs:"
+            tail -50 /tmp/golang.log || true
+          fi
