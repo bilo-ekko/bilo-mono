@@ -1,8 +1,8 @@
 package impact_partner
 
 import (
-	"context"
 	"api-golang/internal/shared/types"
+	"context"
 )
 
 // ProjectWithPrice extends project info with pricing

@@ -142,65 +142,65 @@ jobs:
           pnpm install --no-frozen-lockfile || echo "Lockfile update completed or failed, continuing..."
         continue-on-error: true
 
-      # - name: Install dependencies
-      #   run: |
-      #     # Temporarily disable CI mode to allow installation with outdated lockfiles
-      #     # TODO: Update pnpm-lock.yaml files locally and commit them
-      #     export CI=false
-      #     moon run :install
+      - name: Install dependencies
+        run: |
+          # Temporarily disable CI mode to allow installation with outdated lockfiles
+          # TODO: Update pnpm-lock.yaml files locally and commit them
+          export CI=false
+          moon run :install
 
-      # - name: Start development servers
-      #   run: |
-      #     # Start servers in background
-      #     echo "Starting NestJS API on port 3000..."
-      #     moon run api-nestjs:dev > /tmp/nestjs.log 2>&1 &
-      #     NESTJS_PID=$!
+      - name: Start development servers
+        run: |
+          # Start servers in background
+          echo "Starting NestJS API on port 3000..."
+          moon run api-nestjs:dev > /tmp/nestjs.log 2>&1 &
+          NESTJS_PID=$!
           
-      #     echo "Starting Go API on port 8080..."
-      #     moon run api-golang:dev > /tmp/golang.log 2>&1 &
-      #     GOLANG_PID=$!
+          echo "Starting Go API on port 8080..."
+          moon run api-golang:dev > /tmp/golang.log 2>&1 &
+          GOLANG_PID=$!
           
-      #     # Wait for servers to be ready
-      #     echo "Waiting for servers to start..."
-      #     timeout=60
-      #     elapsed=0
-      #     while [ $elapsed -lt $timeout ]; do
-      #       nestjs_ready=false
-      #       golang_ready=false
+          # Wait for servers to be ready
+          echo "Waiting for servers to start..."
+          timeout=60
+          elapsed=0
+          while [ $elapsed -lt $timeout ]; do
+            nestjs_ready=false
+            golang_ready=false
             
-      #       if curl -s http://localhost:3000/ > /dev/null 2>&1; then
-      #         nestjs_ready=true
-      #       fi
+            if curl -s http://localhost:3000/ > /dev/null 2>&1; then
+              nestjs_ready=true
+            fi
             
-      #       if curl -s http://localhost:8080/ > /dev/null 2>&1; then
-      #         golang_ready=true
-      #       fi
+            if curl -s http://localhost:8080/ > /dev/null 2>&1; then
+              golang_ready=true
+            fi
             
-      #       if [ "$nestjs_ready" = true ] && [ "$golang_ready" = true ]; then
-      #         echo "✅ All servers are ready"
-      #         break
-      #       fi
+            if [ "$nestjs_ready" = true ] && [ "$golang_ready" = true ]; then
+              echo "✅ All servers are ready"
+              break
+            fi
             
-      #       sleep 2
-      #       elapsed=$((elapsed + 2))
-      #       echo "Waiting... ($elapsed/$timeout seconds) - NestJS: $nestjs_ready, Go: $golang_ready"
-      #     done
+            sleep 2
+            elapsed=$((elapsed + 2))
+            echo "Waiting... ($elapsed/$timeout seconds) - NestJS: $nestjs_ready, Go: $golang_ready"
+          done
           
-      #     if [ $elapsed -ge $timeout ]; then
-      #       echo "❌ Servers failed to start within timeout"
-      #       echo "NestJS logs:"
-      #       cat /tmp/nestjs.log || true
-      #       echo "Go API logs:"
-      #       cat /tmp/golang.log || true
-      #       exit 1
-      #     fi
+          if [ $elapsed -ge $timeout ]; then
+            echo "❌ Servers failed to start within timeout"
+            echo "NestJS logs:"
+            cat /tmp/nestjs.log || true
+            echo "Go API logs:"
+            cat /tmp/golang.log || true
+            exit 1
+          fi
           
-      #     # Store PIDs for cleanup
-      #     echo "NESTJS_PID=$NESTJS_PID" >> $GITHUB_ENV
-      #     echo "GOLANG_PID=$GOLANG_PID" >> $GITHUB_ENV
+          # Store PIDs for cleanup
+          echo "NESTJS_PID=$NESTJS_PID" >> $GITHUB_ENV
+          echo "GOLANG_PID=$GOLANG_PID" >> $GITHUB_ENV
 
-      # - name: Run tests
-      #   run: moon run :test --query 'tag=application'
+      - name: Run tests
+        run: moon run :test --query 'tag=application'
 
       - name: Cleanup
         if: always()

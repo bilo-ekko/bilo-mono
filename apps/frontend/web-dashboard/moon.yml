@@ -20,12 +20,10 @@ project:
 
 tasks:
   install:
-    command: 'pnpm install'
+    script: 'cd $MOON_WORKSPACE_ROOT && pnpm install'
     inputs:
       - 'package.json'
       - 'pnpm-lock.yaml'
-    outputs:
-      - 'node_modules/**/*'
 
   dev:
     command: 'pnpm dev'
