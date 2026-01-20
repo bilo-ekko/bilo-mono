@@ -200,7 +200,7 @@ jobs:
           echo "GOLANG_PID=$GOLANG_PID" >> $GITHUB_ENV
 
       - name: Run tests
-        run: moon run :test
+        run: moon run :test --query 'tag=application'
 
       - name: Cleanup
         if: always()

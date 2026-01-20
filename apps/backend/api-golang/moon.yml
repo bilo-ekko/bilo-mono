@@ -3,6 +3,7 @@ stack: 'backend'
 language: 'go'
 
 tags:
+  - 'application'
   - 'backend'
   - 'go'
   - 'golang'

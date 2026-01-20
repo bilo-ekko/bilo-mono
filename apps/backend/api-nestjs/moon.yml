@@ -2,6 +2,7 @@ layer: 'application'
 stack: 'backend'
 language: 'typescript'
 tags:
+  - 'application'
   - 'impactpay'
   - 'backend'
   - 'nestjs'

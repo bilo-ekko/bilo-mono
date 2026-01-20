@@ -2,6 +2,7 @@ layer: 'application'
 stack: 'frontend'
 language: 'typescript'
 tags:
+  - 'application'
   - 'frontend'
   - 'sveltekit'
   - 'svelte'
