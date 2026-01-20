@@ -1,0 +1,339 @@
+{
+  "info": {
+    "name": "Go API - Simplified Tests",
+    "description": "Basic API tests for Go quote creation endpoint",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "go_base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Quotes",
+      "item": [
+        {
+          "name": "Create Quote - Basic",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response is valid JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('object');",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    pm.test(\"Response has required top-level fields\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('id');",
+                  "        pm.expect(jsonData).to.have.property('quoteReference');",
+                  "        pm.expect(jsonData).to.have.property('footprint');",
+                  "        pm.expect(jsonData).to.have.property('credits');",
+                  "        pm.expect(jsonData).to.have.property('contribution');",
+                  "    });",
+                  "",
+                  "    pm.test(\"Footprint has required fields\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.footprint) {",
+                  "            var footprint = jsonData.footprint;",
+                  "            pm.expect(footprint).to.have.property('co2eGrams');",
+                  "            pm.expect(footprint).to.have.property('co2eOunces');",
+                  "            pm.expect(footprint).to.have.property('equivalents');",
+                  "            pm.expect(footprint.equivalents).to.be.an('array');",
+                  "        }",
+                  "    });",
+                  "",
+                  "    pm.test(\"Credits has required fields\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.credits) {",
+                  "            var credits = jsonData.credits;",
+                  "            pm.expect(credits).to.have.property('totalAmount');",
+                  "            pm.expect(credits).to.have.property('impactAmount');",
+                  "            pm.expect(credits).to.have.property('impactSalesTaxAmount');",
+                  "            pm.expect(credits).to.have.property('serviceFeeAmount');",
+                  "            pm.expect(credits).to.have.property('serviceFeeSalesTaxAmount');",
+                  "            pm.expect(credits).to.have.property('pricePerTonneCo2e');",
+                  "            pm.expect(credits).to.have.property('impactPartners');",
+                  "            pm.expect(credits).to.have.property('customerLocationMatch');",
+                  "            pm.expect(credits.impactPartners).to.be.an('array');",
+                  "        }",
+                  "    });",
+                  "",
+                  "    pm.test(\"Contribution has required fields\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.contribution) {",
+                  "            var contribution = jsonData.contribution;",
+                  "            pm.expect(contribution).to.have.property('impactPercentage');",
+                  "            pm.expect(contribution).to.have.property('impactSalesTaxPercentage');",
+                  "            pm.expect(contribution).to.have.property('serviceFeePercentage');",
+                  "            pm.expect(contribution).to.have.property('serviceFeeSalesTaxPercentage');",
+                  "            pm.expect(contribution).to.have.property('impactPartners');",
+                  "            pm.expect(contribution.impactPartners).to.be.an('array');",
+                  "        }",
+                  "    });",
+                  "",
+                  "    pm.test(\"Store quote ID for later tests\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        if (jsonData.id) {",
+                  "            pm.environment.set('created_quote_id', jsonData.id);",
+                  "            pm.environment.set('created_quote_reference', jsonData.quoteReference);",
+                  "        }",
+                  "    });",
+                  "} else {",
+                  "    pm.test(\"Error response has correct structure\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('error');",
+                  "        pm.expect(jsonData.error).to.have.property('code');",
+                  "        pm.expect(jsonData.error).to.have.property('message');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Organisation-ID",
+                "value": "org-parent-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-001\",\n    \"country\": \"GBR\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-001\",\n      \"name\": \"Test Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{go_base_url}}/api/quotes",
+              "host": ["{{go_base_url}}"],
+              "path": ["api", "quotes"]
+            }
+          }
+        },
+        {
+          "name": "Create Quote - With Merchant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    pm.test(\"Response has required structure\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('quoteReference');",
+                  "        pm.expect(jsonData).to.have.property('footprint');",
+                  "        pm.expect(jsonData).to.have.property('credits');",
+                  "    });",
+                  "} else {",
+                  "    pm.test(\"Error response has correct structure\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('error');",
+                  "        pm.expect(jsonData.error).to.have.property('code');",
+                  "        pm.expect(jsonData.error).to.have.property('message');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Organisation-ID",
+                "value": "org-parent-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-002\",\n    \"country\": \"GBR\"\n  },\n  \"merchant\": {\n    \"name\": \"Test Restaurant\",\n    \"mcc\": \"5812\",\n    \"address\": {\n      \"address1\": \"123 High Street\",\n      \"city\": \"London\",\n      \"postalCode\": \"SW1A 1AA\",\n      \"country\": \"GBR\"\n    }\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-002\",\n      \"name\": \"Restaurant Meal\",\n      \"category\": \"restaurant\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{go_base_url}}/api/quotes",
+              "host": ["{{go_base_url}}"],
+              "path": ["api", "quotes"]
+            }
+          }
+        },
+        {
+          "name": "Create Quote - USD Currency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    pm.test(\"Response has required structure\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('quoteReference');",
+                  "        pm.expect(jsonData).to.have.property('credits');",
+                  "        if (jsonData.credits) {",
+                  "            pm.expect(jsonData.credits).to.have.property('totalAmount');",
+                  "        }",
+                  "    });",
+                  "} else {",
+                  "    pm.test(\"Error response has correct structure\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('error');",
+                  "        pm.expect(jsonData.error).to.have.property('code');",
+                  "        pm.expect(jsonData.error).to.have.property('message');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Organisation-ID",
+                "value": "org-parent-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"en-US\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-003\",\n    \"country\": \"USA\",\n    \"state\": \"CA\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-003\",\n      \"name\": \"US Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"USD\"\n      }\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{go_base_url}}/api/quotes",
+              "host": ["{{go_base_url}}"],
+              "path": ["api", "quotes"]
+            }
+          }
+        },
+        {
+          "name": "Get Quote by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var quoteId = pm.environment.get('created_quote_id');",
+                  "if (!quoteId || quoteId === '') {",
+                  "    pm.test(\"Quote ID exists (skipped - no quote created)\", function () {",
+                  "        pm.expect.fail('No quote ID available - previous test may have failed');",
+                  "    });",
+                  "    return;",
+                  "}",
+                  "",
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    pm.test(\"Response has quote entity fields\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('id');",
+                  "        pm.expect(jsonData).to.have.property('quoteReference');",
+                  "        pm.expect(jsonData).to.have.property('organisationId');",
+                  "        pm.expect(jsonData).to.have.property('customerId');",
+                  "        pm.expect(jsonData).to.have.property('status');",
+                  "        pm.expect(jsonData).to.have.property('currency');",
+                  "    });",
+                  "} else {",
+                  "    pm.test(\"Error response has correct structure\", function () {",
+                  "        var jsonData = pm.response.json();",
+                  "        pm.expect(jsonData).to.have.property('error');",
+                  "        pm.expect(jsonData.error).to.have.property('code');",
+                  "        pm.expect(jsonData.error).to.have.property('message');",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{go_base_url}}/api/quotes/{{created_quote_id}}",
+              "host": ["{{go_base_url}}"],
+              "path": ["api", "quotes", "{{created_quote_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Create Quote - Missing Reference (Error Test)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Error response has correct structure\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('error');",
+                  "    pm.expect(jsonData.error).to.have.property('code');",
+                  "    pm.expect(jsonData.error).to.have.property('message');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Organisation-ID",
+                "value": "org-parent-1"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"country\": \"GBR\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-error\",\n      \"name\": \"Test Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{go_base_url}}/api/quotes",
+              "host": ["{{go_base_url}}"],
+              "path": ["api", "quotes"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

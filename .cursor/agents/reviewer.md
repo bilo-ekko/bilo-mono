@@ -1,7 +1,3 @@
----
-name: reviewer
-model: fast
----
 
 ---
 name: reviewer

@@ -1,10 +1,5 @@
 ---
 name: verifier
-model: fast
----
-
----
-name: verifier
 description: Validates completed work. Use after tasks are marked done to confirm implementations are functional.
 model: fast
 ---

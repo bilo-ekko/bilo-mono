@@ -1,7 +1,3 @@
----
-name: go-implementer
-model: fast
----
 
 ---
 name: go-implementer
