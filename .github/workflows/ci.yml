@@ -14,14 +14,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install Moon
-        uses: moonrepo/setup-action@v2
         with:
-          version: 'latest'
+          fetch-depth: 0  # needed so moon can compare current HEAD to base
 
-      - name: Setup Moon toolchains
-        run: moon setup
+      - name: Setup toolchain (Moon + tools)
+        uses: moonrepo/setup-toolchain@v0
 
       - name: Install dependencies
         run: moon run :install
