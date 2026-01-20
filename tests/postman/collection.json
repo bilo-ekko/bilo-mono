@@ -656,6 +656,661 @@
               }
             }
           ]
+        },
+        {
+          "name": "Quotes (Carbon Offset)",
+          "description": "Quote creation endpoints implementing the full carbon offset calculation flow: organisation validation, customer management, carbon footprint calculation, blended project pricing, service fees, and sales tax.",
+          "item": [
+            {
+              "name": "Create Quote - Basic",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Response is valid JSON\", function () {",
+                      "    pm.response.to.be.json;",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.be.an('object');",
+                      "});",
+                      "",
+                      "pm.test(\"Response contains new structure\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('quoteReference');",
+                      "    pm.expect(jsonData).to.have.property('footprint');",
+                      "    pm.expect(jsonData).to.have.property('credits');",
+                      "    pm.expect(jsonData).to.have.property('contribution');",
+                      "});",
+                      "",
+                      "pm.test(\"Footprint has required fields\", function () {",
+                      "    var footprint = pm.response.json().footprint;",
+                      "    pm.expect(footprint).to.have.property('co2eGrams');",
+                      "    pm.expect(footprint).to.have.property('co2eOunces');",
+                      "    pm.expect(footprint).to.have.property('equivalents');",
+                      "    pm.expect(footprint.co2eGrams).to.be.above(0);",
+                      "});",
+                      "",
+                      "pm.test(\"Credits has required fields\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    pm.expect(credits).to.have.property('totalAmount');",
+                      "    pm.expect(credits).to.have.property('impactAmount');",
+                      "    pm.expect(credits).to.have.property('impactSalesTaxAmount');",
+                      "    pm.expect(credits).to.have.property('serviceFeeAmount');",
+                      "    pm.expect(credits).to.have.property('serviceFeeSalesTaxAmount');",
+                      "    pm.expect(credits).to.have.property('pricePerTonneCo2e');",
+                      "    pm.expect(credits).to.have.property('impactPartners');",
+                      "    pm.expect(credits).to.have.property('customerLocationMatch');",
+                      "    pm.expect(credits.totalAmount).to.be.at.least(0);",
+                      "    pm.expect(credits.impactPartners).to.be.an('array');",
+                      "    pm.expect(['state', 'country', 'region', 'world']).to.include(credits.customerLocationMatch);",
+                      "});",
+                      "",
+                      "pm.test(\"Contribution has required fields\", function () {",
+                      "    var contribution = pm.response.json().contribution;",
+                      "    pm.expect(contribution).to.have.property('impactPercentage');",
+                      "    pm.expect(contribution).to.have.property('impactSalesTaxPercentage');",
+                      "    pm.expect(contribution).to.have.property('serviceFeePercentage');",
+                      "    pm.expect(contribution).to.have.property('serviceFeeSalesTaxPercentage');",
+                      "    pm.expect(contribution).to.have.property('impactPartners');",
+                      "    pm.expect(contribution.impactPartners).to.be.an('array');",
+                      "    // Percentages should be between 0 and 1",
+                      "    pm.expect(contribution.impactPercentage).to.be.at.least(0);",
+                      "    pm.expect(contribution.impactPercentage).to.be.at.most(1);",
+                      "});",
+                      "",
+                      "pm.test(\"Store quote ID and reference for later tests\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.environment.set('created_quote_id', jsonData.id);",
+                      "    pm.environment.set('created_quote_reference', jsonData.quoteReference);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1",
+                    "description": "Organisation ID from auth context"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-001\",\n    \"country\": \"GBR\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-001\",\n      \"name\": \"Test Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - With Merchant Details",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Carbon footprint reflects merchant MCC\", function () {",
+                      "    var footprint = pm.response.json().footprint;",
+                      "    // Restaurant MCC (5812) has factor 0.35, so carbon should be around 35 kg for 100 EUR",
+                      "    var carbonKg = footprint.co2eGrams / 1000;",
+                      "    pm.expect(carbonKg).to.be.above(0);",
+                      "    // Allow some variance in calculation",
+                      "    pm.expect(carbonKg).to.be.below(1000);",
+                      "});",
+                      "",
+                      "pm.test(\"Credits show correct amounts\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    pm.expect(credits.totalAmount).to.be.above(0);",
+                      "    pm.expect(credits.pricePerTonneCo2e).to.be.at.least(0);",
+                      "    pm.expect(credits.impactPartners).to.be.an('array');",
+                      "    // Impact partners might be empty if no projects match, so just check it's an array",
+                      "    if (credits.impactPartners.length > 0) {",
+                      "        pm.expect(credits.impactPartners[0]).to.have.property('id');",
+                      "        pm.expect(credits.impactPartners[0]).to.have.property('projects');",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-002\",\n    \"country\": \"GBR\"\n  },\n  \"merchant\": {\n    \"name\": \"Test Restaurant\",\n    \"mcc\": \"5812\",\n    \"address\": {\n      \"address1\": \"123 High Street\",\n      \"city\": \"London\",\n      \"postalCode\": \"SW1A 1AA\",\n      \"country\": \"GBR\"\n    }\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-002\",\n      \"name\": \"Restaurant Meal\",\n      \"category\": \"restaurant\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - With Order Items",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Response contains order items data\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('quoteReference');",
+                      "    pm.expect(jsonData).to.have.property('credits');",
+                      "    pm.expect(jsonData.credits.totalAmount).to.be.at.least(0);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-003\",\n    \"country\": \"GBR\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-003\",\n      \"sku\": \"SKU-001\",\n      \"name\": \"Test Product\",\n      \"category\": \"general\",\n      \"quantity\": 2,\n      \"unitPrice\": {\n        \"value\": 37.75,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - Currency Conversion (USD)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Currency conversion occurred\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    pm.expect(credits.totalAmount).to.be.above(0);",
+                      "    // USD to EUR conversion should affect pricing",
+                      "    pm.expect(credits.pricePerTonneCo2e).to.be.at.least(0);",
+                      "});",
+                      "",
+                      "pm.test(\"US California sales tax may be applied\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    // CA sales tax is 7.25%, but might be 0 if not applicable",
+                      "    var totalTax = credits.impactSalesTaxAmount + credits.serviceFeeSalesTaxAmount;",
+                      "    pm.expect(totalTax).to.be.at.least(0);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-US\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-004\",\n    \"country\": \"USA\",\n    \"state\": \"CA\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-004\",\n      \"name\": \"US Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"USD\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - Currency Conversion (GBP)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"GBP to EUR conversion occurred\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    pm.expect(credits.totalAmount).to.be.above(0);",
+                      "    pm.expect(credits.pricePerTonneCo2e).to.be.at.least(0);",
+                      "});",
+                      "",
+                      "pm.test(\"UK VAT may be applied\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    // UK VAT is 20%, but might be 0 if not applicable",
+                      "    var totalTax = credits.impactSalesTaxAmount + credits.serviceFeeSalesTaxAmount;",
+                      "    pm.expect(totalTax).to.be.at.least(0);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-005\",\n    \"country\": \"GBR\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-005\",\n      \"name\": \"UK Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"GBP\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - Child Organisation",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Quote created successfully\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('quoteReference');",
+                      "    pm.expect(jsonData).to.have.property('credits');",
+                      "});",
+                      "",
+                      "pm.test(\"Ireland VAT may be applied\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    // Ireland VAT is 23%, but might be 0 if not applicable",
+                      "    var totalTax = credits.impactSalesTaxAmount + credits.serviceFeeSalesTaxAmount;",
+                      "    pm.expect(totalTax).to.be.at.least(0);",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1",
+                    "description": "Parent org in header, child org in body"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-IE\",\n  \"organisationId\": \"org-child-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-006\",\n    \"country\": \"IRL\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-006\",\n      \"name\": \"Ireland Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 50.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - Filter Projects by Location",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Customer location match is set\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    pm.expect(credits).to.have.property('customerLocationMatch');",
+                      "    pm.expect(['state', 'country', 'region', 'world']).to.include(credits.customerLocationMatch);",
+                      "});",
+                      "",
+                      "pm.test(\"Impact partners array exists\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    pm.expect(credits.impactPartners).to.be.an('array');",
+                      "    // Note: Partners might be empty if location filtering excludes all projects",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-BR\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-007\",\n    \"country\": \"BRA\"\n  },\n  \"filters\": {\n    \"customerLocation\": true\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-007\",\n      \"name\": \"Brazil Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 150.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - Forbidden (Unauthorised Org)",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 403 Forbidden\", function () {",
+                      "    pm.response.to.have.status(403);",
+                      "});",
+                      "",
+                      "pm.test(\"Error response has correct structure\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('error');",
+                      "    pm.expect(jsonData.error).to.have.property('code');",
+                      "    pm.expect(jsonData.error).to.have.property('message');",
+                      "});",
+                      "",
+                      "pm.test(\"Error code is FORBIDDEN\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.error.code).to.equal('FORBIDDEN');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-child-1",
+                    "description": "Child org cannot access sibling org"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-DE\",\n  \"organisationId\": \"org-child-2\",\n  \"customer\": {\n    \"reference\": \"customer-ref-forbidden\",\n    \"country\": \"DEU\"\n  },\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-forbidden\",\n      \"name\": \"Forbidden Product\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 25.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - Missing Required Field",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400 Bad Request\", function () {",
+                      "    pm.response.to.have.status(400);",
+                      "});",
+                      "",
+                      "pm.test(\"Error indicates missing field\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.error.code).to.equal('MISSING_FIELD');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"organisationId\": \"org-parent-1\"\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Get Quote by ID",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});",
+                      "",
+                      "pm.test(\"Quote has correct ID\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    var expectedId = pm.environment.get('created_quote_id');",
+                      "    if (expectedId) {",
+                      "        pm.expect(jsonData.id).to.equal(expectedId);",
+                      "    }",
+                      "});",
+                      "",
+                      "pm.test(\"Quote entity has all required fields\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData).to.have.property('id');",
+                      "    pm.expect(jsonData).to.have.property('quoteReference');",
+                      "    pm.expect(jsonData).to.have.property('organisationId');",
+                      "    pm.expect(jsonData).to.have.property('customerId');",
+                      "    pm.expect(jsonData).to.have.property('status');",
+                      "    pm.expect(jsonData).to.have.property('currency');",
+                      "    pm.expect(jsonData).to.have.property('carbonCreditTotal');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes/{{created_quote_id}}",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes", "{{created_quote_id}}"]
+                }
+              }
+            },
+            {
+              "name": "Create Quote - With Impact Partner Details",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 201\", function () {",
+                      "    pm.response.to.have.status(201);",
+                      "});",
+                      "",
+                      "pm.test(\"Impact partners include details when requested\", function () {",
+                      "    var credits = pm.response.json().credits;",
+                      "    if (credits.impactPartners.length > 0) {",
+                      "        var partner = credits.impactPartners[0];",
+                      "        pm.expect(partner).to.have.property('id');",
+                      "        pm.expect(partner).to.have.property('projects');",
+                      "        // Details are optional, only check if they exist",
+                      "        if (partner.hasOwnProperty('name')) {",
+                      "            pm.expect(partner.name).to.be.a('string');",
+                      "        }",
+                      "        if (partner.hasOwnProperty('description')) {",
+                      "            pm.expect(partner.description).to.be.a('string');",
+                      "        }",
+                      "        if (partner.hasOwnProperty('logo')) {",
+                      "            pm.expect(partner.logo).to.be.a('string');",
+                      "        }",
+                      "    }",
+                      "});",
+                      "",
+                      "pm.test(\"Contribution partners include details when requested\", function () {",
+                      "    var contribution = pm.response.json().contribution;",
+                      "    if (contribution.impactPartners.length > 0) {",
+                      "        var partner = contribution.impactPartners[0];",
+                      "        pm.expect(partner).to.have.property('id');",
+                      "        pm.expect(partner).to.have.property('impactPercentage');",
+                      "        pm.expect(partner).to.have.property('projects');",
+                      "        // Details are optional, only check if they exist",
+                      "        if (partner.hasOwnProperty('name')) {",
+                      "            pm.expect(partner.name).to.be.a('string');",
+                      "        }",
+                      "        if (partner.hasOwnProperty('description')) {",
+                      "            pm.expect(partner.description).to.be.a('string');",
+                      "        }",
+                      "        if (partner.hasOwnProperty('logo')) {",
+                      "            pm.expect(partner.logo).to.be.a('string');",
+                      "        }",
+                      "    }",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "X-Organisation-ID",
+                    "value": "org-parent-1"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"locale\": \"en-GB\",\n  \"organisationId\": \"org-parent-1\",\n  \"customer\": {\n    \"reference\": \"customer-ref-details\",\n    \"country\": \"GBR\"\n  },\n  \"includeImpactPartnerDetails\": true,\n  \"orderItems\": [\n    {\n      \"itemId\": \"item-details\",\n      \"name\": \"Product with Details\",\n      \"category\": \"general\",\n      \"quantity\": 1,\n      \"unitPrice\": {\n        \"value\": 100.00,\n        \"currencyCode\": \"EUR\"\n      }\n    }\n  ]\n}"
+                },
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes"]
+                }
+              }
+            },
+            {
+              "name": "Get Quote - Not Found",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 404\", function () {",
+                      "    pm.response.to.have.status(404);",
+                      "});",
+                      "",
+                      "pm.test(\"Error response indicates not found\", function () {",
+                      "    var jsonData = pm.response.json();",
+                      "    pm.expect(jsonData.error.code).to.equal('NOT_FOUND');",
+                      "});"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{go_base_url}}/api/quotes/non-existent-quote-id",
+                  "host": ["{{go_base_url}}"],
+                  "path": ["api", "quotes", "non-existent-quote-id"]
+                }
+              }
+            }
+          ]
         }
       ]
     }

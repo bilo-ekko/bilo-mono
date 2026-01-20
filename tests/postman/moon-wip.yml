@@ -23,7 +23,7 @@ tasks:
   test:
     command: 'pnpm test'
     inputs:
-      - 'collection.json'
+      - 'collection-notion.json'
       - 'package.json'
     deps:
       - '~:install'
@@ -31,7 +31,7 @@ tasks:
   test-verbose:
     command: 'pnpm run test:verbose'
     inputs:
-      - 'collection.json'
+      - 'collection-notion.json'
       - 'package.json'
     deps:
       - '~:install'
@@ -39,7 +39,7 @@ tasks:
   test-html:
     command: 'pnpm run test:html'
     inputs:
-      - 'collection.json'
+      - 'collection-notion.json'
       - 'package.json'
     outputs:
       - 'report.html'
@@ -49,5 +49,5 @@ tasks:
   test-script:
     command: './test.sh'
     inputs:
-      - 'collection.json'
+      - 'collection-notion.json'
       - 'test.sh'

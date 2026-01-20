@@ -3,6 +3,8 @@ package impact_project
 import (
 	"errors"
 	"sync"
+
+	"api-golang/internal/shared/types"
 )
 
 // Repository handles data access for ImpactProjects
@@ -18,29 +20,103 @@ func NewRepository() *Repository {
 	}
 
 	// Seed with sample data
-	repo.projects["1"] = &Entity{
-		ID:        "1",
-		Name:      "Amazon Rainforest Conservation",
-		Category:  "forest-conservation",
-		PartnerID: "2",
+	shortDesc1 := "Preserving the world's largest rainforest"
+	longDesc1 := "This project focuses on protecting critical Amazon rainforest areas through community engagement and sustainable practices."
+	image1 := "https://example.com/amazon-forest.jpg"
+	theme1 := ProjectThemeLandUse
+	region1 := "South America"
+
+	shortDesc2 := "Clean energy for rural communities"
+	longDesc2 := "Large-scale solar installation providing renewable energy to underserved communities in India."
+	image2 := "https://example.com/solar-india.jpg"
+	theme2 := ProjectThemeClimateStress
+	region2 := "Asia"
+
+	shortDesc3 := "Offshore wind power generation"
+	longDesc3 := "State-of-the-art wind farm off the coast of Denmark generating clean electricity."
+	image3 := "https://example.com/wind-denmark.jpg"
+	region3 := "Europe"
+
+	shortDesc4 := "Coastal ecosystem restoration"
+	longDesc4 := "Restoring mangrove ecosystems to protect coastlines and sequester carbon."
+	image4 := "https://example.com/mangrove.jpg"
+	theme4 := ProjectThemeWaterUse
+	region4 := "Southeast Asia"
+
+	repo.projects["project-1"] = &Entity{
+		ID:               "project-1",
+		Name:             "Amazon Rainforest Conservation",
+		ImpactPartnerID:  "partner-1",
+		ShortDescription: &shortDesc1,
+		LongDescription:  &longDesc1,
+		Image:            &image1,
+		Type:             ProjectTypeCarbonCredits,
+		Theme:            &theme1,
+		Location: types.Location{
+			Country: "Brazil",
+			Region:  &region1,
+		},
+		Unit: types.ProjectUnit{
+			Type:   "tCO2e",
+			Symbol: "t",
+		},
 	}
-	repo.projects["2"] = &Entity{
-		ID:        "2",
-		Name:      "Solar Farm Initiative India",
-		Category:  "solar",
-		PartnerID: "3",
+
+	repo.projects["project-2"] = &Entity{
+		ID:               "project-2",
+		Name:             "Solar Farm Initiative India",
+		ImpactPartnerID:  "partner-2",
+		ShortDescription: &shortDesc2,
+		LongDescription:  &longDesc2,
+		Image:            &image2,
+		Type:             ProjectTypeCarbonCredits,
+		Theme:            &theme2,
+		Location: types.Location{
+			Country: "India",
+			Region:  &region2,
+		},
+		Unit: types.ProjectUnit{
+			Type:   "tCO2e",
+			Symbol: "t",
+		},
 	}
-	repo.projects["3"] = &Entity{
-		ID:        "3",
-		Name:      "Wind Energy Project Denmark",
-		Category:  "wind",
-		PartnerID: "3",
+
+	repo.projects["project-3"] = &Entity{
+		ID:               "project-3",
+		Name:             "Wind Energy Project Denmark",
+		ImpactPartnerID:  "partner-2",
+		ShortDescription: &shortDesc3,
+		LongDescription:  &longDesc3,
+		Image:            &image3,
+		Type:             ProjectTypeCarbonCredits,
+		Theme:            nil, // Optional
+		Location: types.Location{
+			Country: "Denmark",
+			Region:  &region3,
+		},
+		Unit: types.ProjectUnit{
+			Type:   "tCO2e",
+			Symbol: "t",
+		},
 	}
-	repo.projects["4"] = &Entity{
-		ID:        "4",
-		Name:      "Mangrove Restoration Program",
-		Category:  "reforestation",
-		PartnerID: "2",
+
+	repo.projects["project-4"] = &Entity{
+		ID:               "project-4",
+		Name:             "Mangrove Restoration Program",
+		ImpactPartnerID:  "partner-1",
+		ShortDescription: &shortDesc4,
+		LongDescription:  &longDesc4,
+		Image:            &image4,
+		Type:             ProjectTypeNatureCredits,
+		Theme:            &theme4,
+		Location: types.Location{
+			Country: "Vietnam",
+			Region:  &region4,
+		},
+		Unit: types.ProjectUnit{
+			Type:   "hectares",
+			Symbol: "ha",
+		},
 	}
 
 	return repo
@@ -77,7 +153,7 @@ func (r *Repository) GetByPartnerID(partnerID string) []*Entity {
 
 	projects := make([]*Entity, 0)
 	for _, project := range r.projects {
-		if project.PartnerID == partnerID {
+		if project.ImpactPartnerID == partnerID {
 			projects = append(projects, project)
 		}
 	}

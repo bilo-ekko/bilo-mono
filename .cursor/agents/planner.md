@@ -1,7 +1,3 @@
----
-name: planner
-model: fast
----
 
 ---
 name: planner

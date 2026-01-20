@@ -1,7 +1,3 @@
----
-name: ts-next-implementer
-model: fast
----
 
 ---
 name: ts-next-implementer

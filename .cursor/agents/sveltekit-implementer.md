@@ -1,7 +1,3 @@
----
-name: sveltekit-implementer
-model: fast
----
 
 ---
 name: sveltekit-implementer
