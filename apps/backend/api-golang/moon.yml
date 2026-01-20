@@ -93,3 +93,6 @@ tasks:
     inputs:
       - 'go.mod'
       - 'go.sum'
+
+  clean:
+    script: 'go clean -cache -testcache -modcache && rm -rf bin'

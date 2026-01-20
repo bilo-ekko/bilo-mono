@@ -53,3 +53,6 @@ tasks:
     command: 'pnpm lint'
     inputs:
       - 'src/**/*'
+
+  clean:
+    script: 'rm -rf .next'

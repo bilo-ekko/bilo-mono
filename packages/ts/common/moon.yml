@@ -17,3 +17,6 @@ tasks:
   dev:
     command: 'tsc --watch'
     local: true
+
+  clean:
+    script: 'rm -rf dist'

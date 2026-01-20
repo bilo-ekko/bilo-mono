@@ -51,3 +51,6 @@ tasks:
     inputs:
       - 'collection-notion.json'
       - 'test.sh'
+
+  clean:
+    script: 'rm -rf report.html'

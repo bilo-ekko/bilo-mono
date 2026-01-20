@@ -17,3 +17,6 @@ tasks:
     inputs:
       - '**/*.go'
       - 'go.mod'
+
+  clean:
+    script: 'go clean -cache -testcache -modcache'

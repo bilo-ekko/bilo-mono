@@ -103,3 +103,6 @@ tasks:
     inputs:
       - 'src/**/*.ts'
       - 'test/**/*.ts'
+
+  clean:
+    script: 'rm -rf dist coverage'

@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createTranslator } from "@bilo/translations";
 
-export default function ConsolePage() {
+function ConsoleContent() {
   const searchParams = useSearchParams();
   const locale = searchParams.get("locale") || "en-GB";
   const t = createTranslator(locale as "en-GB" | "de-DE");
@@ -48,5 +49,13 @@ export default function ConsolePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConsolePage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <ConsoleContent />
+    </Suspense>
   );
 }

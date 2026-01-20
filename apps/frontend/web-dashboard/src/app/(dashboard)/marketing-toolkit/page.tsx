@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createTranslator } from "@bilo/translations";
 
-export default function MarketingToolkitPage() {
+function MarketingToolkitContent() {
   const searchParams = useSearchParams();
   const locale = searchParams.get("locale") || "en-GB";
   const t = createTranslator(locale as "en-GB" | "de-DE");
@@ -62,5 +63,13 @@ export default function MarketingToolkitPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function MarketingToolkitPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <MarketingToolkitContent />
+    </Suspense>
   );
 }

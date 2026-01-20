@@ -48,3 +48,6 @@ tasks:
   
   preview:
     command: pnpm preview
+
+  clean:
+    script: 'rm -rf .svelte-kit build'

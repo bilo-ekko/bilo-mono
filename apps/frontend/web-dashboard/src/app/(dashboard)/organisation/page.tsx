@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { createTranslator } from "@bilo/translations";
 
@@ -12,7 +13,7 @@ const tabs = [
 
 type TabId = (typeof tabs)[number]["id"];
 
-export default function OrganisationPage() {
+function OrganisationContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -230,5 +231,13 @@ export default function OrganisationPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function OrganisationPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <OrganisationContent />
+    </Suspense>
   );
 }

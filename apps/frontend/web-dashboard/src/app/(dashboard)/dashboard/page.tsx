@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { createTranslator } from "@bilo/translations";
 
-export default function DashboardPage() {
+function DashboardContent() {
   const searchParams = useSearchParams();
   const locale = searchParams.get("locale") || "en-GB";
   const t = createTranslator(locale as "en-GB" | "de-DE");
@@ -36,5 +37,13 @@ export default function DashboardPage() {
         ))}
       </div>
     </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="p-8">Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }

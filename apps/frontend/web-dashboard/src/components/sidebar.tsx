@@ -14,16 +14,16 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguagePicker } from "./language-picker";
-import { createTranslator } from "@bilo/translations";
+import { createTranslator, type TranslationKey } from "@bilo/translations";
 
 interface NavItem {
-  titleKey: string;
+  titleKey: TranslationKey;
   href: string;
   icon: React.ReactNode;
 }
 
 interface NavSection {
-  titleKey: string;
+  titleKey: TranslationKey;
   items: NavItem[];
 }
 
