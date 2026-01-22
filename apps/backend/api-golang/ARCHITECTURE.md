@@ -6,13 +6,31 @@ This document describes the architectural patterns and design decisions used in 
 
 The quote creation system implements several architectural patterns working together:
 
-> References
-> - [DDD with VSA](https://medium.com/@evgeni.n.rusev/net-domain-driven-design-template-with-a-vertical-slice-architecture-33812c22b509)
+### 1. **Modular Monolith**
+This system is built as a **modular monolith** - a single deployable application organized into well-defined, loosely-coupled modules (domains).
 
-### 1. **Vertical Slice Architecture**
+A modular monolith provides:
+- **Single deployment unit**: All domains are deployed together as one binary, simplifying deployment and operations
+- **Module boundaries**: Each domain is self-contained with clear interfaces, enabling independent development
+- **In-process communication**: Domains communicate through interfaces (ports) within the same process, avoiding network overhead
+- **Future flexibility**: The modular structure makes it straightforward to extract domains into microservices when needed
+
+The modular monolith approach balances the simplicity of a monolith with the organizational benefits of microservices:
+- **Simpler than microservices**: No service mesh, API gateways, or distributed tracing required initially
+- **More organized than a traditional monolith**: Clear module boundaries prevent tight coupling and enable team autonomy
+- **Evolutionary path**: Can extract modules to microservices incrementally as the system grows
+
+The other architectural patterns (Vertical Slice Architecture, DDD, Hexagonal Architecture) work together to support this modular monolith structure by ensuring clean boundaries, clear contracts, and maintainable code organization.
+
+> References
+>
+> - [Modular Monolith Primer](https://www.kamilgrzybek.com/blog/modular-monolith-primer)
+> - [Modular Monolith: A Primer](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+
+### 2. **Vertical Slice Architecture**
 The codebase is organized by **feature/domain** rather than by technical layers. 
 
-Each domain (quote, organisation, impact, finance, etc.) contains all its layers (entity, repository, service, controller) within a single directory. 
+Each domain (**quote**, **organisation**, **impact**, **finance**, etc.) contains all its layers (`entity`, `repository`, `service`, `controller`) within a single directory. 
 
 This approach:
 - Keeps related code together
@@ -20,7 +38,23 @@ This approach:
 - Reduces coupling between unrelated features
 - Aligns with team ownership boundaries
 
-### 2. **Domain-Driven Design (DDD)**
+#### Inter-Slice communication
+
+Slices may call other domains only through a stable contract.
+
+That contract can be:
+- In-process interface (monolith)
+- Message/event (async)
+- HTTP/gRPC client (sync RPC)
+
+If you design the contract as a port, you can change the adapter later without changing the slice.
+
+> References
+>
+> - [Understanding VSA: A simple guide for your team](https://medium.com/@sbenitez73/understanding-vertical-slice-architecture-a-simple-guide-for-your-team-ee5f160b99f1)
+> - []()
+
+### 3. **Domain-Driven Design (DDD)**
 The system is organized into **bounded contexts** representing distinct business domains:
 - **Quote Domain**: Quote creation and management
 - **Organisation Domain**: Organisation and customer management
@@ -31,33 +65,46 @@ The system is organized into **bounded contexts** representing distinct business
 
 Each domain encapsulates its own business logic and data models.
 
-### 3. **Hexagonal Architecture (Ports & Adapters)**
+> References
+>
+> [Domain-Driven Design (DDD)](https://www.geeksforgeeks.org/system-design/domain-driven-design-ddd/)
+
+### 4. **Hexagonal Architecture (Ports & Adapters)**
 Each domain defines **ports** (interfaces) for its dependencies:
-- **Driving Ports**: Interfaces that the domain exposes (e.g., `quote.Service` interface in [`ports.go`](internal/quote/ports.go))
-- **Driven Ports**: Repositories that the domain depends on (e.g., `quote.Repository` interface in [`ports.go`](internal/quote/ports.go))
+- **Driver Ports** (primary actors): Interfaces that the domain exposes (e.g., `quote.Service` interface in [`ports.go`](./internal/quote/ports.go))
+- **Driven Ports** (secondary actors): Repositories that the domain depends on (e.g., `quote.Repository` interface in [`ports.go`](./internal/quote/ports.go))
 
 The **adapters** (implementations) can be swapped without changing the domain logic:
 - `quote.Repository` interface is implemented by [`repository.go`](internal/quote/repository.go) (InMemoryRepository)
 - `quote.Service` interface exists but is **not implemented** - the `Orchestrator` is used directly instead
 - Currently using in-memory repositories, but these can be replaced with database implementations
 
+> References
+>
+> - [Hexagonal Architecture in Go](https://medium.com/@matiasvarela/hexagonal-architecture-in-go-cfd4e436faa3)
+> - [Building RESTful API with Hexagonal Architecture in Go](https://dev.to/bagashiz/building-restful-api-with-hexagonal-architecture-in-go-1mij)
+
 **Cross-Domain Communication**: The orchestrator communicates with external domains through **Service interfaces**, not repositories:
 - Example: [`impact_partner.Service`](internal/impact_partner/ports.go) interface is used by the orchestrator
 - Service implementations (e.g., `DefaultService`) can be replaced with HTTP/gRPC clients when extracting to microservices
 - This pattern prepares the architecture for microservices extraction - inter-service communication can be abstracted behind service interfaces
 
-### 4. **Orchestration Pattern**
+### 5. **Orchestration Pattern**
 The `Orchestrator` coordinates complex workflows that span multiple domains. Instead of domains calling each other directly, the orchestrator:
 - Coordinates the multi-step quote creation process
 - Manages cross-domain dependencies
 - Handles transaction-like workflows
 - Provides a single entry point for complex operations
 
-### 5. **Dependency Injection**
+### 6. **Dependency Injection**
 All dependencies are injected through constructors, making the system:
 - Testable (easy to mock dependencies)
 - Flexible (can swap implementations)
 - Explicit (dependencies are clear)
+
+> References
+> - [DDD with VSA](https://medium.com/@evgeni.n.rusev/net-domain-driven-design-template-with-a-vertical-slice-architecture-33812c22b509)
+
 
 ## Directory Structure
 
@@ -944,3 +991,8 @@ The architecture provides a solid foundation with clear domain boundaries and go
 - [.structure.md](.structure.md) - Directory structure details
 - [internal/quote/orchestrator_test.go](internal/quote/orchestrator_test.go) - Test examples
 /
+
+## General References
+
+> - [S.O.L.I.D Design Principles Explained](https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#open-closed-principle)
+> - []()
